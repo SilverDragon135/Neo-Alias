@@ -1,13 +1,13 @@
 from boa.blockchain.vm.System.ExecutionEngine import GetScriptContainer, GetExecutingScriptHash
 from boa.blockchain.vm.Neo.Transaction import Transaction, GetReferences, GetOutputs, GetUnspentCoins
 from boa.blockchain.vm.Neo.Output import GetValue, GetAssetId, GetScriptHash
-from nas.configuration.NeoAlias import NeoAliasConfiguration
+from nas.configuration.Service import ServiceConfiguration
 
 def gas_attached():
     """
     :returns gas attached to Tx:
     """
-    configuration = NeoAliasConfiguration()
+    configuration = ServiceConfiguration()
     tx = GetScriptContainer()  # type:Transaction
     references = tx.References
     receiver_addr = GetExecutingScriptHash()

@@ -7,8 +7,8 @@ from nas.gateway.NEP5 import NEP5Gateway
 from nas.gateway.SmartNEP5 import SmartNEP5Gateway
 from nas.gateway.NeoAliasService import NeoAliasGateway
 from nas.configuration.Administration import AdminConfiguration
-from nas.configuration.NeoAlias import NeoAliasConfiguration
-from nas.core.base import query
+from nas.configuration.Service import ServiceConfiguration
+from nas.core.na import query
 from nas.common.util import list_slice
 
 def Main(operation, args):
@@ -35,7 +35,7 @@ def Main(operation, args):
         nargs = len(args)
         if operation != None:
             
-            configuration = NeoAliasConfiguration()
+            configuration = ServiceConfiguration()
             """if not configuration.initialized():
                 if operation == 'init':
                     return configuration.init()

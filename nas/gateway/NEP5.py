@@ -1,7 +1,7 @@
 from boa.blockchain.vm.Neo.App import DynamicAppCall
 from boa.blockchain.vm.Neo.Runtime import Notify, CheckWitness
 from boa.blockchain.vm.Neo.Action import RegisterAction
-from nas.core.base import query
+from nas.core.na import query
 from nas.configuration.tokenInfo import Token
 from nas.common.Account import Account
 from nas.common.util import list_slice
@@ -38,7 +38,7 @@ class NEP5Gateway():
         if not alias_name:
             Notify("Alias name not provided.")
             return False
-        args = list_slice(args,1,nargs)
+        args = list_slice(args, 1, nargs)
         to_invoke = query(alias_name, sub_nas, 2)  # script hash or asset id ?
         if to_invoke:
             return DynamicAppCall(to_invoke, operation, args)

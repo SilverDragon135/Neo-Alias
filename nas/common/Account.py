@@ -3,7 +3,7 @@ addressounts module - addressounts management
 """
 from boa.code.builtins import concat
 from nas.wrappers.storage import Storage
-from nas.configuration.NeoAlias import NeoAliasConfiguration
+from nas.configuration.Service import ServiceConfiguration
 
 
 class Account():
@@ -13,6 +13,9 @@ class Account():
     address = None
 
     def is_valid(self):
+        """
+        :returns True if adress is in valid format:
+        """
         if len(self.address) == 20:
             return True
         else:
@@ -21,7 +24,7 @@ class Account():
     def available_assets(self):
         """
         :param address:
-        :returns asset count:
+        \n:returns available assets:
         """
         # if NEP5:
         #    return self.storage.load(address)
@@ -33,6 +36,15 @@ class Account():
         return 0
 
     def approve_assets(self, address, assets_to_approve):
+        """
+        :param address:
+        :param assets_to_approve:
+        \n:returns True on success:
+        \nApproves assets to withdraw for another address.
+        Another adress has to be in valid format.
+        """
+        if len(self.address) != 20:
+            return False
         approval_key = concat(self.address, address)
         storage = Storage()
         storage.delete(approval_key)
@@ -41,11 +53,21 @@ class Account():
         return True
 
     def approved_assets(self, address):
+        """
+        :param address:
+        \n:returns approved assets for given address:
+        """
         storage = Storage()
         approval_key = concat(self.address, address)
         return storage.load(approval_key)
 
     def add_approved_assets(self, address, assets_to_approve):
+        """
+        :param address:
+        :param assets_to_approve:
+        \n:returns True on success:
+        \nAdds assets_to_approve to approved assets
+        """
         storage = Storage()
         approval_key = concat(self.address, address)
         approved = self.approved_assets(address)
@@ -54,7 +76,13 @@ class Account():
         storage.save(approval_key, approved)
         return True
 
-    def sub_approved_assets(self, address, assets_to_remove):   
+    def sub_approved_assets(self, address, assets_to_remove): 
+        """
+        :param address:
+        :param assets_to_remove:
+        \n:returns True on success:
+        \nSubtracts assets_to_remove from approved assets
+        """  
         storage = Storage()
         approval_key = concat(self.address, address)
         approved = self.approved_assets(address)
@@ -81,21 +109,28 @@ class Account():
             storage.save(alias_available_assets_key, assets_to_store)
         return True
 
-    def add_available_assets(self, assets):
-
+    def add_available_assets(self, assets_to_add):
+        """
+        :param assets_to_store:
+        Adds assets_to_add to available assets
+        """
         # if NEP5:
         #    available = self.available_assets() 
         #    return self.update_available_assets(available + assets) 
         available = self.available_assets()    
-        available = available + assets
+        available = available + assets_to_add
         return self.update_available_assets(available)
 
-    def sub_available_assets(self, assets):
+    def sub_available_assets(self, assets_to_remove):
+        """
+        :param assets_to_store:
+        Substracts assets_to_remove from available assets
+        """
         # if NEP5:
         #    available = self.available_assets() 
         #    return self.update_available_assets(available - assets) 
         available = self.available_assets()    
-        available = available - assets
+        available = available - assets_to_remove
         return self.update_available_assets(available)
 
     def asset_key(self):
@@ -105,6 +140,7 @@ class Account():
         \n:returns generated storage key:
         """
         # will be removed in NEP5 implementation
-        configuration = NeoAliasConfiguration()
+        # would be useful only for support of multiple assets
+        configuration = ServiceConfiguration()
         addr = self.address
         return concat(configuration.primary_asset_id, addr)

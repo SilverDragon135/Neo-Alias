@@ -5,12 +5,12 @@ Modul util - contains derived methods for calculation
 from boa.blockchain.vm.Neo.App import DynamicAppCall
 from boa.blockchain.vm.Neo.Runtime import Notify
 from boa.code.builtins import list
-from nas.core.fee_pool import FeesPool
-from nas.configuration.NeoAlias import NeoAliasConfiguration
+from nas.core.na_fee_pool import FeesPool
+from nas.configuration.Service import ServiceConfiguration
 from nas.common.Account import Account
 from nas.wrappers.tx_info import gas_attached
-from nas.common.util import get_header_timestamp
-from nas.common.Alias import Alias
+from nas.common.util import get_header_timestamp, debug_message
+from nas.common.Alias import Alias, load_alias
 
 from boa.code.builtins import concat
 
@@ -26,16 +26,21 @@ def call_sub_nas(sub_nas, operation, args):
     sub_nas_alias.name = sub_nas
     sub_nas_alias.atype = 2
 
-    exists = sub_nas_alias.exists()
-    expired = sub_nas_alias.expired()
+    if not sub_nas_alias.exists():
+        msg = concat("Alias not found: ", sub_nas)
+        Notify(msg)
+        return debug_message(False,msg)
+   
+    sub_nas_alias = load_alias(sub_nas_alias)
 
-    if exists and not expired:
-        # pass register call tu sub Neo alias service
-        target = sub_nas_alias.target()
-        return DynamicAppCall(target, operation, args)
-    # sub nas not in database
-    Notify("Sub NAS not found or expired.")
-    return False
+    if sub_nas_alias.expired():
+        msg = concat("Alias expired: ", sub_nas)
+        Notify(msg)
+        return debug_message(False,msg)
+
+    # pass register call tu sub Neo alias service
+    target = sub_nas_alias.target
+    return DynamicAppCall(target, operation, args)
 
 def try_pay_holding_fee(owner, alias_type, duration_to_pay):
     """
@@ -46,7 +51,7 @@ def try_pay_holding_fee(owner, alias_type, duration_to_pay):
     \nchecks if owner provided enough assets to hold alias and if so 
     adds fee to fee pool
     """
-    configuration = NeoAliasConfiguration()
+    configuration = ServiceConfiguration()
     # get fee info
     fee = configuration.get_fee_per_period(alias_type)
     fee_period = configuration.get_fee_period()
@@ -67,8 +72,6 @@ def try_pay_holding_fee(owner, alias_type, duration_to_pay):
     if available_assets >= to_pay:
         assets_to_store = to_pay - available_assets
     else:
-        msg = ["Not enough assets to pay for alias. Needed (GAS):", to_pay]
-        Notify(msg)
         return False
 
     fee_pool = FeesPool()
@@ -89,7 +92,7 @@ def add_loyality_bonus_to_fee(alias_owner_since, alias_fee):
     if not alias_fee:
         return 0
     loyality_bonus = 100000000
-    configuration = NeoAliasConfiguration()
+    configuration = ServiceConfiguration()
     maximum_loyality_bonus = configuration.get_maximum_loyalty_bonus()
     loyality_bonus_period = configuration.get_loyality_bonus_per_period()
     loyality_bonus_per_period = configuration.get_loyality_bonus_period()

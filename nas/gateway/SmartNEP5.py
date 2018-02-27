@@ -1,5 +1,5 @@
 from boa.blockchain.vm.Neo.Runtime import Notify
-from nas.core.base import query
+from nas.core.na import query
 from nas.gateway.NEP5 import NEP5Gateway
 
 

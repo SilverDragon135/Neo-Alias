@@ -16,13 +16,11 @@ Neo alias is dapp built on NEO blockchain. The purpose of NA is to make the bloc
 3. add other alias types
 
 # Testing without sub-nas support
--   Main module is NASC.py 
--   Core_NA will be highest NA authority and was not yet tested. Please check Proposal.md for more informations.
 
-base.py - fully tested
+na.py - fully tested
 -   na_register, na_renew, na_update_target,na_transfer, na_delete, na_query, na_alias_data
 
-trady.py 
+na_trady.py 
 -   na_offer_sell, na_cancel_sale_offer - tested
 -   buy_offer was not yet tested, but should work
 

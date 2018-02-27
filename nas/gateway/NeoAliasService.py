@@ -1,7 +1,7 @@
 
 from boa.blockchain.vm.Neo.Runtime import Notify
-from nas.core.base import *
-from nas.core.trade import *
+from nas.core.na import *
+from nas.core.na_trade import *
 from nas.common.util import list_slice
 
 

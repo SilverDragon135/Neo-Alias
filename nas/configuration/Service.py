@@ -4,19 +4,23 @@ Module configuration - contains NA root configuration
 from boa.blockchain.vm.Neo.Runtime import Notify, CheckWitness
 from boa.blockchain.vm.Neo.Action import RegisterAction
 from nas.wrappers.storage import Storage
-from nas.core.fee_pool import FeesPool
+from nas.core.na_fee_pool import FeesPool
 from nas.configuration.Administration import AdminConfiguration
 
 ConfigurationUpdatedEvent = RegisterAction('configurationUpdated', 'option', 'value')
 
 
-class NeoAliasConfiguration():
+class ServiceConfiguration():
     """
     :Interface to access NEO Alias configuration:
     \n :Configuration will be determined based on voting mechanism, that will be implemented later:
     \n Final implementation will prevent centralized control and except init() method for initial
     setup, configuration is going to be controloble only trough voting
     """
+    # debug constant to turn on/off debug messages
+    debug = True
+    # gas_id
+    primary_asset_id = b'\xe7-(iy\xeel\xb1\xb7\xe6]\xfd\xdf\xb2\xe3\x84\x10\x0b\x8d\x14\x8ewX\xdeB\xe4\x16\x8bqy,`'
 
     def init(self):
         """
@@ -42,9 +46,6 @@ class NeoAliasConfiguration():
         """
         data = ["maximum_registration_duration", "free_maximum_registration_duration", "reservation_duration", "fee_per_period", "fee_period", "loyality_bonus_per_period", "loyality_bonus_period", "maximum_loyalty_bonus", "trade_commission", "non_expirable_free_of_charge_NEO_accounts"]
         return data
-
-    # gas_id
-    primary_asset_id = b'\xe7-(iy\xeel\xb1\xb7\xe6]\xfd\xdf\xb2\xe3\x84\x10\x0b\x8d\x14\x8ewX\xdeB\xe4\x16\x8bqy,`'
 
     # registration configuration
 

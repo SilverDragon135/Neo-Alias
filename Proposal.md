@@ -1,9 +1,13 @@
 # Proposal v0.1
 This readme describes our vision. Most of it may change based on community decisions and requirements. Only fixed idea in this document is "NA SC has to be open source, community controlled and developed". 
 
+There are two scenarios, what will be with NA in future
+-   I will to create NAA (Neo alias authority). It is already created on github.
+-   The CoZ will be interested acting as NAA. I would like to start discussion about this soon.
+
 # Neo Alias Smart Contract (NA SC)
 
-Neo alias is dapp built on NEO blockchain. The purpose of NA is to make the blockchain more user friendly and simplify the application deployment and maintenance during the dapps lifetime. 
+Neo alias is on chain dapp build on NEO blockchain. The purpose of NA is to make the blockchain more user friendly and simplify the application deployment and maintenance during the dapps lifetime. 
 
 We believe, that service like this should belong to community and not company. In final stage of development will be NA:
 - open source
@@ -43,8 +47,8 @@ Neo Alias (except Neo Accounts) are registered for maximum duration defined by c
 Example of fee calculation:
 
 Community defined configuration:
-- fee period - timestamp
-- fee - BigInteger
+- fee period - timestamp - defined per alias type
+- fee - BigInteger - defined per alias type
 - maximum duration - timestamp 
 
 Calculation: to pay = (duration / fee period) * fee
@@ -52,11 +56,14 @@ Calculation: to pay = (duration / fee period) * fee
 NAC will be used to pay and trading with aliases. Expected total supply is 100 000 000 or 1 000 000 000 with 8 decimals. (The community decide) 
 
 Expected NAC distribution:
+- 1% founder
 - 15% dev and marketing fund 
 - 5% Neo.org
-- 5% CoZ
+- 0-5% CoZ
 - 50% ICO
-- 25% in first five years automatically added to fee pool and redistributed to NAC holders .
+- 24-29% staking rewards - in first five years automatically added to fee pool and redistributed to NAC holders .
+
+In case CoZ will be interested in becoming NAA, the 5% reserved to CoZ will be merged with staking rewards and CoZ would control dev fund.
 
 # Neo Account
 Neo account was inspired by PASC. It targets to simplify standard adress operations. Supports all NEP5 methods. Neo accounts will be tradable, non-expirable and free of charge. 
@@ -67,14 +74,21 @@ Examples:
 - NEO240000000015547754
 - NEO266887488999977453
 
-NEO0 to NEO10 will be propably reserved for CoZ, NEO.org and NA dev funds. NEO11 to 100 will be reserved for NA ICO and provided for top 90 investors over 50 NEO. All not used accounts in this range will be burned - not available for further use.
+# Neo Account ICO Reservation
+- NEO9 reserved for founder(me :)
+- NEO0-8 and NEO10-99 reserved for COZ and NEO.org and their developers (to simplify funding)
+- NEO100 reserved for NA dev fund
+- NEO101 - NEOXXXXX - All investors participating in ICO will get NEO account automatically (Just I need to figure out, how to dump SC storage :)) based on amount invested.
+That means the highest invested amount will be NEO101, next 102, next 103 etc.
+
+All reserved account will be automatically registered to participating addresses and can be traded. Reservation in this context means, that if you do not want to sell your account
+you cannot lose it (may be limited, if community votes for expirable accounts, but it is not expected)
 
 # Asset Alias
 In form of symbol (up to four characters). Pointing to SC of deployed asset. Simplifying wallets development. New assets can be added by adding only the asset symbol.
 
 # Smart Contract Alias
 In form of string pointing to Smart Contract. Improving off-chain application development. No more updates required in case of SC change. 
-
 
 # ICO
 Expected ICO date - May/June
