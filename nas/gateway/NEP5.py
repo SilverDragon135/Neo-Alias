@@ -1,13 +1,11 @@
 from boa.blockchain.vm.Neo.App import DynamicAppCall
-from boa.blockchain.vm.Neo.Runtime import Notify, CheckWitness
-from boa.blockchain.vm.Neo.Action import RegisterAction
+from boa.blockchain.vm.Neo.Runtime import Notify
 from nas.core.na import query
-from nas.configuration.tokenInfo import Token
+from nas.core.na_nep5 import *
+from nas.configuration.TokenInfo import Token
 from nas.common.Account import Account
 from nas.common.util import list_slice
 
-TransferEvent = RegisterAction('transfer', 'from', 'to', 'amount')
-ApproveEvent = RegisterAction('approval', 'owner', 'spender', 'value')
 
 
 class NEP5Gateway():
@@ -19,7 +17,7 @@ class NEP5Gateway():
         methods = ['name', 'symbol', 'decimals', 'totalSupply', 'balanceOf', 'transfer', 'transferFrom', 'approve', 'allowance']
         return methods
 
-    def dynamic_call_nep5(self, operation, args):
+    def dynamic_NEP5_call(self, operation, args):
         """
         :param operation:
         :param args [ [alias_name, sub_nas],... ]:
@@ -56,202 +54,52 @@ class NEP5Gateway():
         """
         nargs = len(args)
         NAC = Token()
-        if operation == 'name':
+        if operation == 'name' or operation == 'decimals' or operation == 'symbol' or operation == 'totalSupply':
             if nargs == 1:
-                return self.dynamic_call_nep5(operation, args)
-            else:
-                # NAC token
+                return self.dynamic_NEP5_call(operation, args)
+
+            if operation == 'name':
                 return NAC.name
-        elif operation == 'decimals':
-            if nargs == 1:
-                return self.dynamic_call_nep5(operation, args)
-            else:
-                # NAC token 100 000 000 or 1 000 000 000, and 2 decimals ?
+            if operation == 'decimals':
                 return NAC.decimals
-
-        elif operation == 'symbol':
-            if nargs == 1:
-                return self.dynamic_call_nep5(operation, args)
-            else:
-                # NAC (possibly NAT or NAG)
+            if operation == 'symbol':
                 return NAC.symbol
-
-        arg_error = "Not enough arguments provided."
-
-        if operation == 'totalSupply':
-            if nargs == 1:
-                return self.dynamic_call_nep5(operation, args)
-            else:
+            if operation == 'totalSupply':
                 return NAC.total_supply
+        
+        arg_error = "Not enough or too many arguments provided."
 
-        elif operation == 'balanceOf':
-            if nargs == 1:
-                account = Account()
-                account.address = args[0]
-                if account.is_valid():
-                    return account.available_assets()
-            elif nargs == 2:
-                return self.dynamic_call_nep5(operation, args)
+        if operation == 'balanceOf':
+            if nargs == 2:
+                return self.dynamic_NEP5_call(operation, args)
+            elif nargs == 1:
+                address = args[0]
+                return balanceOf(address)
             return arg_error
 
-        elif operation == 'transfer':
+        elif operation == 'transfer' or operation == 'transferFrom' or operation == 'approve':
+            if nargs == 4:
+                return self.dynamic_NEP5_call(operation, args)
             if nargs == 3:
                 t_from = args[0]
                 t_to = args[1]
                 t_amount = args[2]
-                return self.transfer(t_from, t_to, t_amount)
-            elif nargs == 4:
-                return self.dynamic_call_nep5(operation, args)
-            return arg_error
+                if operation == 'transfer':
+                    return transfer(t_from, t_to, t_amount)
 
-        elif operation == 'transferFrom':
-            if nargs == 3:
-                t_from = args[0]
-                t_to = args[1]
-                t_amount = args[2]
-                return self.transfer_from(t_from, t_to, t_amount)
-            elif nargs == 4:
-                return self.dynamic_call_nep5(operation, args)
-            return arg_error
+                if operation == 'transferFrom':
+                    return transfer_from(t_from, t_to, t_amount)
 
-        elif operation == 'approve':
-            if nargs == 3:
-                t_owner = args[0]
-                t_spender = args[1]
-                t_amount = args[2]
-                return self.approve(t_owner, t_spender, t_amount)
-            elif nargs == 4:
-                return self.dynamic_call_nep5(operation, args)
+                if operation == 'approve':
+                    return approve(t_from, t_to, t_amount) # t_from => t_owner, t_to => t_spender
             return arg_error
 
         elif operation == 'allowance':
-            if nargs == 2:
+            if nargs == 3:
+                return self.dynamic_NEP5_call(operation, args)
+            elif nargs == 2:
                 t_owner = args[0]
                 t_spender = args[1]
-                return self.allowance(t_owner, t_spender)
-            elif nargs == 3:
-                return self.dynamic_call_nep5(operation, args)
+                return allowance(t_owner, t_spender)
             return arg_error
-
-        return False
-
-    def transfer(self, t_from, t_to, amount):
-        """
-        :param t_from:
-        :param t_to:
-        :param amount:
-        \n:returns True on success and False if failed:
-        \ntryes to transfer assets from one owner to another
-        """
-        if amount <= 0:
-            return False
-        from_acc = Account()
-        from_acc.address = t_from
-        to_acc = Account()
-        to_acc.address = t_to
-        if not from_acc.is_valid() or not to_acc.is_valid():
-            Notify("One or both of accounts not valid")
-            return False
-
-        if CheckWitness(from_acc.address):
-            if t_from == t_to:
-                print("Transfer to self!")
-                return True
-
-            if from_acc.available_assets() < amount:
-                print("Insufficient funds")
-                return False
-
-            from_acc.sub_available_assets(amount)
-            to_acc.add_available_assets(amount)
-            TransferEvent(t_from, t_to, amount)
-            return True
-        else:
-            print("You can send only from your adress")
-        return False
-
-    def transfer_from(self, t_from, t_to, amount):
-        """
-        :param t_from:
-        :param t_to:
-        :param amount:
-        \n:returns True on success and False if failed:
-        \ntryes to withdraw assets from one owner to another
-        """
-        if amount <= 0:
-            return False
-
-        from_acc = Account()
-        from_acc.address = t_from
-        to_acc = Account()
-        to_acc.address = t_to
-        if not from_acc.is_valid() or not to_acc.is_valid():
-            Notify("One or both of accounts not valid")
-            return False
-
-        available_to_to_addr = from_acc.approved_assets(to_acc)
-
-        if available_to_to_addr < amount:
-            print("Insufficient funds approved")
-            return False
-
-        if from_acc.available_assets() < amount:
-            print("Insufficient tokens in from balance")
-            return False
-
-        from_acc.sub_available_assets(amount)
-        to_acc.add_available_assets(amount)
-
-        Notify("Transfer complete")
-
-        from_acc.sub_approved_assets(to_acc, amount)
-        TransferEvent(t_from, t_to, amount)
-        return True
-
-    def approve(self, t_owner, t_spender, amount):
-        """
-        :param t_owner:
-        :param t_spender:
-        :param amount:
-        \n:returns True on success and False if failed:
-        \ntryes to approve assets withdrawal for others
-        """
-        if not CheckWitness(t_owner):
-            print("Incorrect permission")
-            return False
-
-        if amount < 0:
-            print("Negative amount")
-            return False
-
-        from_acc = Account()
-        from_acc.address = t_owner
-        to_acc = Account()
-        to_acc.address = t_spender
-        if not from_acc.is_valid() or not to_acc.is_valid():
-            Notify("One or both of accounts not valid")
-            return False
-
-        # cannot approve an amount that is
-        # currently greater than the from balance
-        if from_acc.available_assets() >= amount:
-            from_acc.approve_assets(to_acc, amount)
-            ApproveEvent(t_owner, t_spender, amount)
-            return True
-        return False
-
-    def allowance(self, t_owner, t_spender):
-        """
-        :param t_owner:
-        :param t_spender:
-        :param amount:
-        \n:returns assets aproved to withdraw by t_spender from t_owner:
-        """
-        from_acc = Account()
-        from_acc.address = t_owner
-        to_acc = Account()
-        to_acc.address = t_spender
-        if not from_acc.is_valid() or not to_acc.is_valid():
-            Notify("One or both of accounts not valid")
-            return False
-        return from_acc.approved_assets(to_acc)
+        

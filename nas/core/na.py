@@ -7,7 +7,7 @@ from boa.blockchain.vm.Neo.Action import RegisterAction
 from nas.configuration.Service import ServiceConfiguration
 from nas.common.Alias import Alias, load_alias
 from nas.core.util import call_sub_nas, try_pay_holding_fee
-from nas.common.util import get_header_timestamp, debug_message
+from nas.common.util import get_header_timestamp, return_value
 from boa.code.builtins import concat
 from nas.wrappers.storage import Storage
 
@@ -44,14 +44,14 @@ def register(alias, sub_nas, args):
     if not CheckWitness(alias_owner):
         msg = "You can register alias only for yourself."
         Notify(msg)
-        return debug_message(False,msg)
+        return return_value(False,msg)
 
     configuration = ServiceConfiguration()
     if alias_expiration < get_header_timestamp():
         if not configuration.are_NEO_acc_free_of_chage() or alias_type != 4:
             msg = "You provided already expired alias_expiraton."
             Notify(msg)
-            return debug_message(False,msg)
+            return return_value(False,msg)
 
     new_alias = Alias()
     new_alias.name = alias
@@ -65,13 +65,13 @@ def register(alias, sub_nas, args):
         if not available:
             msg = "Alias is already in use. You can submit buy offer if you are interested."
             Notify(msg)
-            return debug_message(False,msg)
+            return return_value(False,msg)
     
     new_alias.target = alias_target
     if not new_alias.is_valid():
         msg = "This alias cannot be registered. Invalid name or target property for given alias_type."
         Notify(msg)
-        return debug_message(False,msg)
+        return return_value(False,msg)
     
     # check if the alias registration is not too long (to keep alias circulating)
     # adjust duration
@@ -85,7 +85,7 @@ def register(alias, sub_nas, args):
     if not try_pay_holding_fee(alias_owner, alias_type, duration_to_pay):  # handles assets update
         msg = "Not enough assets to pay for alias."
         Notify(msg)
-        return debug_message(False,msg)
+        return return_value(False,msg)
 
     new_alias.owner=alias_owner
     new_alias.owner_since=timestamp
@@ -95,7 +95,7 @@ def register(alias, sub_nas, args):
     RegisterAliasEvent(alias, alias_type, alias_owner, alias_target, alias_expiration)
     msg = concat("Alias registred: ", alias)
     Notify(msg)
-    return debug_message(True,msg)
+    return return_value(True,msg)
 
 
 def renew(alias, sub_nas, args):
@@ -116,7 +116,7 @@ def renew(alias, sub_nas, args):
     if nargs < 1:
         msg = "Renew requires alias_expiration."
         Notify(msg)
-        return debug_message(False,msg)
+        return return_value(False,msg)
 
     alias_expiration = args[0]
     if nargs > 1:
@@ -130,7 +130,7 @@ def renew(alias, sub_nas, args):
         if not NEO_acc_free_of_chage or alias_type != 4:
             msg = "You provided already expired alias_expiraton."
             Notify(msg)
-            return debug_message(False,msg)
+            return return_value(False,msg)
 
     alias_for_renewal = Alias()
     alias_for_renewal.name = alias
@@ -139,19 +139,19 @@ def renew(alias, sub_nas, args):
     if not alias_for_renewal.exists():
         msg = concat("Alias not found: ", alias)
         Notify(msg)
-        return debug_message(False,msg)
+        return return_value(False,msg)
    
     alias_for_renewal = load_alias(alias_for_renewal)
 
     if alias_for_renewal.expired():
         msg = concat("Alias expired: ", alias)
         Notify(msg)
-        return debug_message(False,msg)
+        return return_value(False,msg)
 
     if not CheckWitness(alias_for_renewal.owner):
         msg = "You do not own this alias, so you cannot invoke renew"
         Notify(msg)
-        return debug_message(False,msg)
+        return return_value(False,msg)
 
     # check if the alias registration is not too long (to keep alias circulating)
     # adjust duration
@@ -165,12 +165,12 @@ def renew(alias, sub_nas, args):
     if NEO_acc_free_of_chage and alias_type == 4:
         msg = "Alias already payed for requested or maximum duration."
         Notify(msg)
-        return debug_message(False,msg)
+        return return_value(False,msg)
         
     if alias_for_renewal.expiration >= alias_expiration:
         msg = "Alias already payed for requested or maximum duration."
         Notify(msg)
-        return debug_message(False,msg)
+        return return_value(False,msg)
 
     # calculate duration to pay
     duration_to_pay = alias_expiration - alias_for_renewal.expiration
@@ -178,7 +178,7 @@ def renew(alias, sub_nas, args):
     if not try_pay_holding_fee(alias_for_renewal.owner, alias_type, duration_to_pay):  # handles assets update
         msg = "Not enough assets to pay for alias."
         Notify(msg)
-        return debug_message(False,msg)
+        return return_value(False,msg)
 
     # renew alias
     alias_for_renewal.expiration = alias_expiration
@@ -187,7 +187,7 @@ def renew(alias, sub_nas, args):
     RenewAliasEvent(alias, alias_type, alias_expiration)
     msg = concat("Alias renew success. New expiration: ", alias_expiration)
     Notify(msg)
-    return debug_message(alias_expiration,msg)
+    return return_value(alias_expiration,msg)
 
 
 def update_target(alias, sub_nas, args):
@@ -219,31 +219,31 @@ def update_target(alias, sub_nas, args):
     if not alias_to_update.exists():
         msg = concat("Alias not found: ", alias)
         Notify(msg)
-        return debug_message(False,msg)
+        return return_value(False,msg)
    
     alias_to_update = load_alias(alias_to_update)
 
     if alias_to_update.expired():
         msg = concat("Alias expired: ", alias)
         Notify(msg)
-        return debug_message(False,msg)       
+        return return_value(False,msg)       
 
     if not CheckWitness(alias_to_update.owner):
         msg = "You do not own this alias, so you cannot update target"
         Notify(msg)
-        return debug_message(False,msg)
+        return return_value(False,msg)
 
     alias_to_update.target=alias_target
     if not alias_to_update.target_valid():
         msg = "Not valid target for this alias type."
         Notify(msg)
-        return debug_message(False,msg)      
+        return return_value(False,msg)      
 
     alias_to_update.save()
     UpdateAliasTargetEvent(alias, alias_type, alias_target)
     msg = concat("Alias target updated: ", alias_target)
     Notify(msg)
-    return debug_message(True,msg)
+    return return_value(True,msg)
 
 
 def transfer(alias, sub_nas, args):
@@ -276,24 +276,24 @@ def transfer(alias, sub_nas, args):
     if not alias_to_transfer.exists():
         msg = concat("Alias not found: ", alias)
         Notify(msg)
-        return debug_message(False,msg)
+        return return_value(False,msg)
    
     alias_to_transfer = load_alias(alias_to_transfer)
     if alias_to_transfer.expired():
         msg = concat("Alias expired: ", alias)
         Notify(msg)
-        return debug_message(False,msg)       
+        return return_value(False,msg)       
 
     if len(new_alias_owner) != 20:
         msg = "Invalid new owner address. Must be exactly 20 bytes"
         Notify(msg)
-        return debug_message(False,msg)
+        return return_value(False,msg)
 
     old_owner = alias_to_transfer.owner
     if not CheckWitness(old_owner):
         msg = "You do not own this alias, so you cannot invoke transfer"
         Notify(msg)
-        return debug_message(False,msg)
+        return return_value(False,msg)
 
     # transfer alias
     alias_to_transfer.owner = new_alias_owner
@@ -303,7 +303,7 @@ def transfer(alias, sub_nas, args):
     msg = concat(msg, alias_to_transfer.owner)
     Notify(msg)
     TransferAliasEvent(alias, alias_type, old_owner, new_alias_owner)
-    return debug_message(True,msg)
+    return return_value(True,msg)
 
 
 def delete(alias, sub_nas, args):
@@ -330,7 +330,7 @@ def delete(alias, sub_nas, args):
     if not alias_to_delete.exists():
         msg = concat("Alias not found: ", alias)
         Notify(msg)
-        return debug_message(False,msg)
+        return return_value(False,msg)
 
     alias_to_delete = load_alias(alias_to_delete)
     # no need to store expired aliases, so in case there will be service for automatic
@@ -345,11 +345,11 @@ def delete(alias, sub_nas, args):
         msg = concat(msg, " deleted.")
         Notify(msg)
         DeleteAliasEvent(alias, alias_type)
-        return debug_message(True,msg)
+        return return_value(True,msg)
 
     msg = "You do not own this alias and it is not expired, so you cannot delete it"
     Notify(msg)
-    return debug_message(False,msg)
+    return return_value(False,msg)
 
 
 def query(alias, sub_nas, args):
@@ -388,7 +388,7 @@ def query(alias, sub_nas, args):
     msg = concat("Alias ", alias)
     msg = concat(msg, " not found or expired.")
     Notify(msg)
-    return debug_message(False,msg)
+    return return_value(False,msg)
 
 
 def alias_data(alias, sub_nas, args):
@@ -420,4 +420,4 @@ def alias_data(alias, sub_nas, args):
     msg = concat("Alias ", alias)
     msg = concat(msg, " not found or expired.")
     Notify(msg)
-    return debug_message(False,msg)
+    return return_value(False,msg)

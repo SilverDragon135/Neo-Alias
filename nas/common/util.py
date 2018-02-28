@@ -38,7 +38,7 @@ def list_slice(array, start, stop):
     else:
         return None
 
-def debug_message(non_debug, debug):
+def return_value(non_debug, debug):
     """
     :param non_debug:
     :param debug:

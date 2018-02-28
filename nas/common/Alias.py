@@ -98,7 +98,7 @@ class Alias():
             digit = acc_number[l-i:l-j]
             while digit and l-i >= 0:
                 digit = acc_number[l-i:l-j]
-                if digit != "0" and digit != "1" and digit != "2" and digit != "3" and digit != "4" and digit != "5" and digit != "6" and digit != "7" and digit != "8" and digit != "9":
+                if digit < "0" or digit > "9":
                     return False
                 i+=1
                 j= i - 1

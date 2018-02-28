@@ -3,7 +3,6 @@ addressounts module - addressounts management
 """
 from boa.code.builtins import concat
 from nas.wrappers.storage import Storage
-from nas.configuration.Service import ServiceConfiguration
 
 
 class Account():
@@ -26,12 +25,9 @@ class Account():
         :param address:
         \n:returns available assets:
         """
-        # if NEP5:
-        #    return self.storage.load(address)
-        alias_available_assets_key = self.asset_key()
-        if alias_available_assets_key:
+        if self.address:
             storage = Storage()          
-            assets = storage.load(alias_available_assets_key)
+            assets = storage.load(self.address)
             return assets
         return 0
 
@@ -98,15 +94,10 @@ class Account():
         :param assets_to_store:
         Updates availabel assets for addressount
         """
-        # if NEP5:
-        #    self.storage.delete(address)
-        #    self.storage.save(address, assets_to_store)
-        #    return True  
         storage = Storage()
-        alias_available_assets_key = self.asset_key()
-        storage.delete(alias_available_assets_key)
+        storage.delete(self.address)
         if assets_to_store and assets_to_store > 0:
-            storage.save(alias_available_assets_key, assets_to_store)
+            storage.save(self.address, assets_to_store)
         return True
 
     def add_available_assets(self, assets_to_add):
@@ -114,9 +105,6 @@ class Account():
         :param assets_to_store:
         Adds assets_to_add to available assets
         """
-        # if NEP5:
-        #    available = self.available_assets() 
-        #    return self.update_available_assets(available + assets) 
         available = self.available_assets()    
         available = available + assets_to_add
         return self.update_available_assets(available)
@@ -126,21 +114,6 @@ class Account():
         :param assets_to_store:
         Substracts assets_to_remove from available assets
         """
-        # if NEP5:
-        #    available = self.available_assets() 
-        #    return self.update_available_assets(available - assets) 
         available = self.available_assets()    
         available = available - assets_to_remove
         return self.update_available_assets(available)
-
-    def asset_key(self):
-        """
-        :param adress:
-        \n:param type_of_key:
-        \n:returns generated storage key:
-        """
-        # will be removed in NEP5 implementation
-        # would be useful only for support of multiple assets
-        configuration = ServiceConfiguration()
-        addr = self.address
-        return concat(configuration.primary_asset_id, addr)

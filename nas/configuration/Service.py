@@ -5,7 +5,7 @@ from boa.blockchain.vm.Neo.Runtime import Notify, CheckWitness
 from boa.blockchain.vm.Neo.Action import RegisterAction
 from nas.wrappers.storage import Storage
 from nas.core.na_fee_pool import FeesPool
-from nas.configuration.Administration import AdminConfiguration
+from nas.configuration.Administration import AdminConfiguration, init_test_funds
 
 ConfigurationUpdatedEvent = RegisterAction('configurationUpdated', 'option', 'value')
 
@@ -33,6 +33,11 @@ class ServiceConfiguration():
         storage = Storage()
         # initialize
         storage.save("NASC_initialized", True)
+
+        #init for testing
+        if self.debug:
+            init_test_funds()
+
         Notify("NASC initialized.")
 
     def initialized(self):

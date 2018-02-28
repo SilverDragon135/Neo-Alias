@@ -9,7 +9,7 @@ from nas.configuration.Service import ServiceConfiguration
 from nas.common.Account import Account
 from nas.core.na_fee_pool import FeesPool
 from nas.common.Alias import Alias, load_alias
-from nas.common.util import debug_message
+from nas.common.util import return_value
 from nas.wrappers.tx_info import gas_attached
 
 SellOfferEvent = RegisterAction('putOnSale', 'alias_name', 'alias_type', 'price')
@@ -52,19 +52,19 @@ def offer_sell(alias, sub_nas, args):
     if not alias_to_sell.exists():
         msg = concat("Alias not found: ", alias)
         Notify(msg)
-        return debug_message(False, msg)
+        return return_value(False, msg)
 
     alias_to_sell = load_alias(alias_to_sell)
 
     if alias_to_sell.expired():
         msg = concat("Alias expired: ", alias)
         Notify(msg)
-        return debug_message(False, msg)
+        return return_value(False, msg)
 
     if not CheckWitness(alias_to_sell.owner):
         msg = "This operation can invoke only alias owner."
         Notify(msg)
-        return debug_message(False, msg)
+        return return_value(False, msg)
 
     buy_offer_expiration = alias_to_sell.buy_offer_expiration
     alias_to_sell_buy_offer_price = alias_to_sell.buy_offer_price
@@ -95,7 +95,7 @@ def offer_sell(alias, sub_nas, args):
         TradeSuccesfullEvent(alias, alias_type, old_owner, new_alias_owner, price)
         msg = "Sold."
         Notify(msg)
-        return debug_message(True, msg)
+        return return_value(True, msg)
 
     alias_to_sell.for_sale = 1
     alias_to_sell.sell_offer_price = price
@@ -103,7 +103,7 @@ def offer_sell(alias, sub_nas, args):
     SellOfferEvent(alias, alias_type, price)
     msg = "Put on sale."
     Notify(msg)
-    return debug_message(True, msg)
+    return return_value(True, msg)
 
 
 def cancel_sale_offer(alias, sub_nas, args):
@@ -129,19 +129,19 @@ def cancel_sale_offer(alias, sub_nas, args):
     if not alias_on_sale.exists():
         msg = concat("Alias not found: ", alias)
         Notify(msg)
-        return debug_message(False, msg)
+        return return_value(False, msg)
 
     alias_on_sale = load_alias(alias_on_sale)
 
     if alias_on_sale.expired():
         msg = concat("Alias expired: ", alias)
         Notify(msg)
-        return debug_message(False, msg)
+        return return_value(False, msg)
 
     if not CheckWitness(alias_on_sale.owner):
         msg = "This operation can invoke only alias owner."
         Notify(msg)
-        return debug_message(False, msg)
+        return return_value(False, msg)
 
     alias_on_sale.for_sale = 0
     alias_on_sale.sell_offer_price = 0
@@ -149,7 +149,7 @@ def cancel_sale_offer(alias, sub_nas, args):
     CancelSellOfferEvent(alias, alias_type)
     msg = "Sale offer canceled."
     Notify(msg)
-    return debug_message(True, msg)
+    return return_value(True, msg)
 
 
 def offer_buy(alias, sub_nas, args):
@@ -183,30 +183,30 @@ def offer_buy(alias, sub_nas, args):
     if not alias_to_buy.exists():
         msg = concat("Alias not found: ", alias)
         Notify(msg)
-        return debug_message(False, msg)
+        return return_value(False, msg)
 
     alias_to_buy = load_alias(alias_to_buy)
 
     if alias_to_buy.expired():
         msg = concat("Alias expired: ", alias)
         Notify(msg)
-        return debug_message(False, msg)
+        return return_value(False, msg)
 
     if not CheckWitness(buy_offer_owner):
         msg = "You can offer buy only for yourself."
         Notify(msg)
-        return debug_message(False, msg)
+        return return_value(False, msg)
 
     if alias_to_buy.buy_offer_owner == alias_to_buy.owner:
         msg = "You already own this alias."
         Notify(msg)
-        return debug_message(False, msg)
+        return return_value(False, msg)
 
     timestamp = get_header_timestamp()
     if buy_offer_expiration < timestamp:
         msg = "Cannot put expired offer."
         Notify(msg)
-        return debug_message(False, msg)
+        return return_value(False, msg)
 
     buyer_account = Account()
     buyer_account.address = buy_offer_owner
@@ -216,14 +216,14 @@ def offer_buy(alias, sub_nas, args):
     if offerer_available_assets < buy_offer_price:
         msg = "Not enough assets provided."
         Notify(msg)
-        return debug_message(False, msg)
+        return return_value(False, msg)
 
     other_buy_offer_expiration = alias_to_buy.buy_offer_expiration
     alias_to_buy_buy_offer_price = alias_to_buy.buy_offer_price
     if alias_to_buy_buy_offer_price > buy_offer_price and other_buy_offer_expiration > timestamp:
         msg = "There is higher offer."
         Notify(msg)
-        return debug_message(False, msg)
+        return return_value(False, msg)
     else:
         # refund assets to stored_buy_offer_owner
         old_buyer_acc = Account()
@@ -257,7 +257,7 @@ def offer_buy(alias, sub_nas, args):
         TradeSuccesfullEvent(alias, alias_type, old_owner, buy_offer_owner, buy_offer_price)
         msg = "Sold."
         Notify(msg)
-        return debug_message(True, msg)
+        return return_value(True, msg)
 
     alias_to_buy.buy_offer_target = buy_offer_target
     alias_to_buy.buy_offer_owner = buy_offer_owner
@@ -269,7 +269,7 @@ def offer_buy(alias, sub_nas, args):
     BuyOfferEvent(alias, alias_type, buy_offer_owner, buy_offer_price)
     msg = "Buy offer submitted."
     Notify(msg)
-    return debug_message(True, msg)
+    return return_value(True, msg)
 
 
 def cancel_buy_offer(alias, sub_nas, args):
@@ -295,19 +295,19 @@ def cancel_buy_offer(alias, sub_nas, args):
     if not alias_with_buy_offer.exists():
         msg = concat("Alias not found: ", alias)
         Notify(msg)
-        return debug_message(False, msg)
+        return return_value(False, msg)
 
     alias_with_buy_offer = load_alias(alias_with_buy_offer)
 
     if alias_with_buy_offer.expired():
         msg = concat("Alias expired: ", alias)
         Notify(msg)
-        return debug_message(False, msg)
+        return return_value(False, msg)
 
     if not CheckWitness(alias_with_buy_offer.buy_offer_owner):
         msg = "This operation can invoke only buy offer owner."
         Notify(msg)
-        return debug_message(False, msg)
+        return return_value(False, msg)
 
     # refund
     buyer_acc = Account()
@@ -323,4 +323,4 @@ def cancel_buy_offer(alias, sub_nas, args):
     CancelBuyOfferEvent(alias, alias_type, alias_with_buy_offer.buy_offer_owner)
     msg = "Buy offer canceled."
     Notify(msg)
-    return debug_message(True, msg)
+    return return_value(True, msg)

@@ -9,7 +9,7 @@ from nas.core.na_fee_pool import FeesPool
 from nas.configuration.Service import ServiceConfiguration
 from nas.common.Account import Account
 from nas.wrappers.tx_info import gas_attached
-from nas.common.util import get_header_timestamp, debug_message
+from nas.common.util import get_header_timestamp, return_value
 from nas.common.Alias import Alias, load_alias
 
 from boa.code.builtins import concat
@@ -29,14 +29,14 @@ def call_sub_nas(sub_nas, operation, args):
     if not sub_nas_alias.exists():
         msg = concat("Alias not found: ", sub_nas)
         Notify(msg)
-        return debug_message(False,msg)
+        return return_value(False,msg)
    
     sub_nas_alias = load_alias(sub_nas_alias)
 
     if sub_nas_alias.expired():
         msg = concat("Alias expired: ", sub_nas)
         Notify(msg)
-        return debug_message(False,msg)
+        return return_value(False,msg)
 
     # pass register call tu sub Neo alias service
     target = sub_nas_alias.target

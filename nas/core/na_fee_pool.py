@@ -41,4 +41,4 @@ class FeesPool:
             CollectedFeesChangedEvent(collected_fees_in_pool)
             msg = ["Fee added to pool",to_add]
             Notify(msg)
-        return to_add
+        return True

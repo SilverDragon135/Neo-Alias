@@ -2,6 +2,12 @@
 .vscode*
 *.avm
 
+# privte test configuration
+/tests/configuration/private.py
+
+#Chains
+/Chains/
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
