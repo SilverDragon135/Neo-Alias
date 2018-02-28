@@ -8,7 +8,6 @@ from boa.code.builtins import list
 from nas.core.na_fee_pool import FeesPool
 from nas.configuration.Service import ServiceConfiguration
 from nas.common.Account import Account
-from nas.wrappers.tx_info import gas_attached
 from nas.common.util import get_header_timestamp, return_value
 from nas.common.Alias import Alias, load_alias
 
@@ -65,19 +64,15 @@ def try_pay_holding_fee(owner, alias_type, duration_to_pay):
     account.address = owner
 
     available_assets = account.available_assets()
-    
-    attached_assets = gas_attached()
-    available_assets = available_assets + attached_assets
 
     if available_assets >= to_pay:
-        assets_to_store = to_pay - available_assets
+        # update account assets
+        account.sub_available_assets(to_pay)
     else:
         return False
 
     fee_pool = FeesPool()
     fee_pool.add_fee_to_pool(to_pay)
-    # update account assets
-    account.update_available_assets(assets_to_store)
     return True
 
 

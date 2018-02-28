@@ -6,7 +6,7 @@
 /tests/configuration/private.py
 
 #Chains
-/Chains/
+**/Chains/
 
 # Windows image file caches
 Thumbs.db

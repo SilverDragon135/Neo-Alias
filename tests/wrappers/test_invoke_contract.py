@@ -33,7 +33,7 @@ def LoadAndRun(arguments, wallet):
 
             script = content
 
-            return DoRun(script, arguments, wallet, path,False)
+            return DoRun(script, arguments, wallet, path, False)
 
     except Exception as e:
         print("Could not load script %s " % e)

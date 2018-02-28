@@ -105,7 +105,7 @@ class Account():
         :param assets_to_store:
         Adds assets_to_add to available assets
         """
-        available = self.available_assets()    
+        available = self.available_assets() 
         available = available + assets_to_add
         return self.update_available_assets(available)
 

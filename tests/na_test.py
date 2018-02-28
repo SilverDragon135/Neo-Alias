@@ -1,4 +1,5 @@
 import os
+import time
 from wrappers.test_invoke_contract import BuildAndRun, LoadAndRun, RunTestAndReturnResult
 from configuration.private import path_to_root_script, path_to_avm
 from wrappers.init import init_test
@@ -8,7 +9,6 @@ from boa.compiler import Compiler
 #settings
 build = False
 #settings
-
 
 if build:
     #BuildAndRun(path_to_root_script,[])
@@ -30,19 +30,23 @@ test_index = 1
 for test in tests:
     arguments = test[1]
     result = RunTestAndReturnResult(arguments,Wallet)
-    #print (test[0])
-    #quit()
+
     expected_results = test[0]
     success = False
     for expected_result in expected_results:
         if result == expected_result:
-            print("Test n." + str(test_index) + " result (SUCCESS): " + str(result))
+            msg = "Test n." + str(test_index) + " result (SUCCESS): " + str(result)
+            print(msg)
             success_count += 1
             success = True
-            break;
+            break
     if not success: 
-        print("Test n." + str(test_index) + " result (FAILED): " + str(result))
+        msg="Test n." + str(test_index) + " result (FAILED): " + str(result)
+        print(msg)
     test_index += 1
+
+
+Wallet.Close()
 
 print("=========================================================")
 print("Testing results (success/total): " + str(success_count) + "/" + str(test_count))

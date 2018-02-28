@@ -10,7 +10,6 @@ from nas.common.Account import Account
 from nas.core.na_fee_pool import FeesPool
 from nas.common.Alias import Alias, load_alias
 from nas.common.util import return_value
-from nas.wrappers.tx_info import gas_attached
 
 SellOfferEvent = RegisterAction('putOnSale', 'alias_name', 'alias_type', 'price')
 CancelSellOfferEvent = RegisterAction('cancelOnSale', 'alias_name', 'alias_type')
@@ -212,7 +211,6 @@ def offer_buy(alias, sub_nas, args):
     buyer_account.address = buy_offer_owner
     # check if enough assets for offer
     offerer_available_assets = buyer_account.available_assets()
-    offerer_available_assets += gas_attached()
     if offerer_available_assets < buy_offer_price:
         msg = "Not enough assets provided."
         Notify(msg)

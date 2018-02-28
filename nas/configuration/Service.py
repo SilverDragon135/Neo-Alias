@@ -19,8 +19,6 @@ class ServiceConfiguration():
     """
     # debug constant to turn on/off debug messages
     debug = True
-    # gas_id
-    primary_asset_id = b'\xe7-(iy\xeel\xb1\xb7\xe6]\xfd\xdf\xb2\xe3\x84\x10\x0b\x8d\x14\x8ewX\xdeB\xe4\x16\x8bqy,`'
 
     def init(self):
         """
@@ -28,8 +26,9 @@ class ServiceConfiguration():
         """
         configuration = AdminConfiguration()
         if not CheckWitness(configuration.root_admin):
-            Notify("Only root_admin can initialize NASC.")
-            return False
+            msg = "Only root_admin can initialize NASC."
+            Notify(msg)
+            return msg
         storage = Storage()
         # initialize
         storage.save("NASC_initialized", True)
@@ -38,7 +37,9 @@ class ServiceConfiguration():
         if self.debug:
             init_test_funds()
 
-        Notify("NASC initialized.")
+        msg="NASC initialized."
+        Notify(msg)
+        return msg
 
     def initialized(self):
         storage = Storage()
