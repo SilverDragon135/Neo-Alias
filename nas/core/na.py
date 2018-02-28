@@ -48,7 +48,7 @@ def register(alias, sub_nas, args):
 
     configuration = ServiceConfiguration()
     if alias_expiration < get_header_timestamp():
-        if not configuration.are_NEO_acc_free_of_chage() or alias_type != 4:
+        if not configuration.are_NEO_acc_free_of_charge() or alias_type != 4:
             msg = "You provided already expired alias_expiraton."
             Notify(msg)
             return return_value(False,msg)
@@ -125,7 +125,7 @@ def renew(alias, sub_nas, args):
         alias_type = 0
 
     configuration = ServiceConfiguration()
-    NEO_acc_free_of_chage = configuration.are_NEO_acc_free_of_chage()
+    NEO_acc_free_of_chage = configuration.are_NEO_acc_free_of_charge()
     if alias_expiration< get_header_timestamp():
         if not NEO_acc_free_of_chage or alias_type != 4:
             msg = "You provided already expired alias_expiraton."

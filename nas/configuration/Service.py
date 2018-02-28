@@ -120,7 +120,7 @@ class ServiceConfiguration():
         \n:returns fee per period for given type:
         """
         storage = Storage()
-        neo_accs_free_of_charge = self.are_NEO_acc_free_of_chage()
+        neo_accs_free_of_charge = self.are_NEO_acc_free_of_charge()
         if alias_type == 4 and neo_accs_free_of_charge:
             return 0
         keys = self.options()
@@ -206,7 +206,7 @@ class ServiceConfiguration():
         ConfigurationUpdatedEvent(key, trade_commission)
         return True
 
-    def are_NEO_acc_free_of_chage(self):
+    def are_NEO_acc_free_of_charge(self):
         """
         :returns True/False:
         \nmens NEO accs (NEO564522165) are free
@@ -219,7 +219,7 @@ class ServiceConfiguration():
             return True
         return stored
 
-    def set_are_NEO_acc_free_of_chage(self, free):
+    def set_are_NEO_acc_free_of_charge(self, free):
         """
         :param free:
         \nenalbles/disables free NEO accs (NEO564522165)

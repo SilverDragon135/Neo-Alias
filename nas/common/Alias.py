@@ -51,7 +51,7 @@ class Alias():
         # if NEO accs free of charge
         # NEO account never expire, can be only sold
         configuration = ServiceConfiguration()
-        if configuration.are_NEO_acc_free_of_chage() and self.atype == 4:
+        if configuration.are_NEO_acc_free_of_charge() and self.atype == 4:
             return False
         expiration = self.expiration
         return expiration < get_header_timestamp()
@@ -71,6 +71,10 @@ class Alias():
         expiration = self.expiration
         end = expiration + alias_reservation
         timestamp = get_header_timestamp()
+        
+        if configuration.are_NEO_acc_free_of_charge() and self.atype == 4:
+            return False
+
         if end > timestamp:
             return False
         return True
