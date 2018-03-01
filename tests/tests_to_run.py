@@ -17,9 +17,30 @@ def get_tests() -> []:
     #arguments
     [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'init','[]']],
 
+# NEP5 test
+
     [ [10000], #expected result
     #arguments
     [ path_to_avm, 'test', '0710', '02', 'True', 'False', 'balanceOf','["ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM"]']],
+
+
+    [ [b'Neo Alias Coin'], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'name','[]']],
+
+    [ [b'NAC'], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'symbol','[]']],
+
+    [ [8], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '02', 'True', 'False', 'decimals','[]']],
+
+    [ [100000000000000000], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '02', 'True', 'False', 'totalSupply','[]']],
+
+# end NEP5 test
 
 # NA - register test
 

@@ -47,7 +47,7 @@ def transfer(t_from, t_to, amount):
         return return_value(False, msg)
 
     if not CheckWitness(from_acc.address):
-        msg = "Only owner can transger!"
+        msg = "Only owner can transfer!"
         Notify(msg)
         return return_value(False, msg)
 
@@ -89,6 +89,11 @@ def transfer_from(t_from, t_to, amount):
 
     if t_from == t_to:
         msg = "Sender and recipient are same!"
+        Notify(msg)
+        return return_value(False, msg)
+
+    if not CheckWitness(to_acc.address):
+        msg = "Only owner of destination address can transferFrom!"
         Notify(msg)
         return return_value(False, msg)
 
