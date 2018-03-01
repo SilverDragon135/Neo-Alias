@@ -40,6 +40,33 @@ def get_tests() -> []:
     #arguments
     [ path_to_avm, 'test', '0710', '02', 'True', 'False', 'totalSupply','[]']],
 
+    [ [b'Transfer completed.'], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'transfer','["ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM", "AZRtyq1woyVP8va9uReGM3tsp7YtX33Nrw", 20]'],],
+
+    [ [b'Spender can withdraw (from your address): \x14'], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'approve','["ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM", "AZRtyq1woyVP8va9uReGM3tsp7YtX33Nrw", 20]'],],
+
+    [ [b'Spender can withdraw: \x14'], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'allowance','["ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM", "AZRtyq1woyVP8va9uReGM3tsp7YtX33Nrw"]'],],
+
+    [ [b'Transfer completed.'], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'transferFrom','["ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM", "AZRtyq1woyVP8va9uReGM3tsp7YtX33Nrw", 20]'],
+    1 ],
+
+    [ [40], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '02', 'True', 'False', 'balanceOf','["AZRtyq1woyVP8va9uReGM3tsp7YtX33Nrw"]']],
+
+    # only to keep test consistency
+    [ [b'Transfer completed.'], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'transfer','["AZRtyq1woyVP8va9uReGM3tsp7YtX33Nrw", "ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM", 40]'],
+    1 ], # wallet id
+
 # end NEP5 test
 
 # NA - register test

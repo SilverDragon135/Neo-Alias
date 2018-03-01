@@ -43,19 +43,19 @@ class NeoAliasGateway():
             args = list_slice(args,1,nargs)
 
             if operation == 'na_register':
-                return register(alias_name, sub_nas, args)
+                return na_register(alias_name, sub_nas, args)
             elif operation == 'na_renew':
-                return renew(alias_name, sub_nas, args)
+                return na_renew(alias_name, sub_nas, args)
             elif operation == 'na_update_target':
-                return update_target(alias_name, sub_nas, args)
+                return na_update_target(alias_name, sub_nas, args)
             elif operation == 'na_transfer':
-                return transfer(alias_name, sub_nas, args)
+                return na_transfer(alias_name, sub_nas, args)
             elif operation == 'na_delete':
-                return delete(alias_name, sub_nas, args)
+                return na_delete(alias_name, sub_nas, args)
             elif operation == 'na_query':
-                return query(alias_name, sub_nas, args)
+                return na_query(alias_name, sub_nas, args)
             elif operation == 'na_alias_data':
-                return alias_data(alias_name, sub_nas, args)
+                return na_alias_data(alias_name, sub_nas, args)
             elif operation == 'na_offer_sell':
                 return offer_sell(alias_name, sub_nas, args)
             elif operation == 'na_cancel_sale_offer':

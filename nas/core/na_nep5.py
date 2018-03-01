@@ -41,7 +41,11 @@ def transfer(t_from, t_to, amount):
     from_acc.address = t_from
     to_acc = Account()
     to_acc.address = t_to
-    if not from_acc.is_valid() or not to_acc.is_valid():
+    
+    from_valid = from_acc.is_valid()
+    to_valid = to_acc.is_valid()
+
+    if not from_valid or not to_valid:
         msg = "Provided adresses are not in valid fromat (Expected length = 20)."
         Notify(msg)
         return return_value(False, msg)
@@ -59,7 +63,7 @@ def transfer(t_from, t_to, amount):
     from_acc.sub_available_assets(amount)
     to_acc.add_available_assets(amount)
     TransferEvent(t_from, t_to, amount)
-    
+
     msg = "Transfer completed."
     Notify(msg)
     return return_value(True, msg)
@@ -82,7 +86,11 @@ def transfer_from(t_from, t_to, amount):
     from_acc.address = t_from
     to_acc = Account()
     to_acc.address = t_to
-    if not from_acc.is_valid() or not to_acc.is_valid():
+    
+    from_valid = from_acc.is_valid()
+    to_valid = to_acc.is_valid()
+
+    if not from_valid or not to_valid:
         msg = "Provided adresses are not in valid fromat (Expected length = 20)."
         Notify(msg)
         return return_value(False, msg)
@@ -146,7 +154,11 @@ def approve(t_owner, t_spender, amount):
     from_acc.address = t_owner
     to_acc = Account()
     to_acc.address = t_spender
-    if not from_acc.is_valid() or not to_acc.is_valid():
+
+    from_valid = from_acc.is_valid()
+    to_valid = to_acc.is_valid()
+
+    if not from_valid or not to_valid:
         msg = "Provided adresses are not in valid fromat (Expected length = 20)."
         Notify(msg)
         return return_value(False, msg)
@@ -182,7 +194,10 @@ def allowance(t_owner, t_spender):
     to_acc = Account()
     to_acc.address = t_spender
 
-    if not from_acc.is_valid() or not to_acc.is_valid():
+    from_valid = from_acc.is_valid()
+    to_valid = to_acc.is_valid()
+
+    if not from_valid or not to_valid:
         msg = "Provided adresses are not in valid fromat (Expected length = 20)."
         Notify(msg)
         return return_value(False, msg)

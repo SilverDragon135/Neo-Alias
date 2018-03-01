@@ -39,9 +39,10 @@ class Account():
         \nApproves assets to withdraw for another address.
         Another adress has to be in valid format.
         """
-        if len(self.address) != 20:
+        address = self.address
+        if len(address) != 20:
             return False
-        approval_key = concat(self.address, address)
+        approval_key = concat(address, address)
         storage = Storage()
         storage.delete(approval_key)
         if assets_to_approve > 0:
@@ -54,7 +55,8 @@ class Account():
         \n:returns approved assets for given address:
         """
         storage = Storage()
-        approval_key = concat(self.address, address)
+        address = self.address
+        approval_key = concat(address, address)
         return storage.load(approval_key)
 
     def add_approved_assets(self, address, assets_to_approve):
@@ -65,7 +67,8 @@ class Account():
         \nAdds assets_to_approve to approved assets
         """
         storage = Storage()
-        approval_key = concat(self.address, address)
+        address = self.address
+        approval_key = concat(address, address)
         approved = self.approved_assets(address)
         storage.delete(approval_key)
         approved += assets_to_approve 
@@ -80,7 +83,8 @@ class Account():
         \nSubtracts assets_to_remove from approved assets
         """  
         storage = Storage()
-        approval_key = concat(self.address, address)
+        address = self.address
+        approval_key = concat(address, address)
         approved = self.approved_assets(address)
         storage.delete(approval_key)
         assets_to_approve = approved - assets_to_remove

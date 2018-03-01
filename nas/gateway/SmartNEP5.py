@@ -1,5 +1,5 @@
 from boa.blockchain.vm.Neo.Runtime import Notify
-from nas.core.na import query
+from nas.core.na import na_query
 from nas.gateway.NEP5 import NEP5Gateway
 
 
@@ -47,7 +47,7 @@ class SmartNEP5Gateway():
                 return False
 
             alias_type_arg = [4]
-            address = query(acc_alias_name, sub_nas, alias_type_arg)
+            address = na_query(acc_alias_name, sub_nas, alias_type_arg)
             if address:
                 args[index_last] = address
                 return nep5_service.handle_NEP5_call('balanceOf', args)
@@ -80,8 +80,8 @@ class SmartNEP5Gateway():
                 return False
 
             alias_type_arg = [4]
-            address_from = query(from_alias_name, sub_nas_from, alias_type_arg)
-            address_to = query(to_alias_name, sub_nas_to, alias_type_arg)
+            address_from = na_query(from_alias_name, sub_nas_from, alias_type_arg)
+            address_to = na_query(to_alias_name, sub_nas_to, alias_type_arg)
             if address_from and address_to:
                 args[index_3rd_to_last] = address_from
                 args[index_2nd_to_last] = address_to

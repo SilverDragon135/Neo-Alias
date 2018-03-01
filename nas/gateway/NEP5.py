@@ -1,6 +1,6 @@
 from boa.blockchain.vm.Neo.App import DynamicAppCall
 from boa.blockchain.vm.Neo.Runtime import Notify
-from nas.core.na import query
+from nas.core.na import na_query
 from nas.core.na_nep5 import *
 from nas.configuration.TokenInfo import Token
 from nas.common.Account import Account
@@ -37,7 +37,7 @@ class NEP5Gateway():
             Notify("Alias name not provided.")
             return False
         args = list_slice(args, 1, nargs)
-        to_invoke = query(alias_name, sub_nas, 2)  # script hash or asset id ?
+        to_invoke = na_query(alias_name, sub_nas, 2)  # script hash or asset id ?
         if to_invoke:
             return DynamicAppCall(to_invoke, operation, args)
         else:

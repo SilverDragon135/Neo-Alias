@@ -8,7 +8,7 @@ from nas.gateway.SmartNEP5 import SmartNEP5Gateway
 from nas.gateway.NeoAliasService import NeoAliasGateway
 from nas.configuration.Administration import AdminConfiguration
 from nas.configuration.Service import ServiceConfiguration
-from nas.core.na import query
+from nas.core.na import na_query
 from nas.common.util import list_slice
 
 def Main(operation, args):
@@ -79,7 +79,7 @@ def Main(operation, args):
                     Notify("Alias name not provided.")
                     return False
                 args = list_slice(args,1,nargs)
-                sc = query(alias_name, sub_nas, args)
+                sc = na_query(alias_name, sub_nas, args)
                 if sc:
                     return DynamicAppCall(sc, operation, args)
                 else:

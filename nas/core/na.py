@@ -19,7 +19,7 @@ DeleteAliasEvent = RegisterAction('deleteAlias', 'name', 'type')
 QueryAliasEvent = RegisterAction('queryAlias', 'name', 'type', 'result')
 
 
-def register(alias, sub_nas, args):
+def na_register(alias, sub_nas, args):
     """
     :param alias:
     :param sub_nas:
@@ -98,7 +98,7 @@ def register(alias, sub_nas, args):
     return return_value(True,msg)
 
 
-def renew(alias, sub_nas, args):
+def na_renew(alias, sub_nas, args):
     """
     :param alias:
     :param sub_nas:
@@ -190,7 +190,7 @@ def renew(alias, sub_nas, args):
     return return_value(alias_expiration,msg)
 
 
-def update_target(alias, sub_nas, args):
+def na_update_target(alias, sub_nas, args):
     """
     :param alias:
     :param sub_nas:
@@ -246,7 +246,7 @@ def update_target(alias, sub_nas, args):
     return return_value(True,msg)
 
 
-def transfer(alias, sub_nas, args):
+def na_transfer(alias, sub_nas, args):
     """
     :param alias:
     :param sub_nas:
@@ -306,7 +306,7 @@ def transfer(alias, sub_nas, args):
     return return_value(True,msg)
 
 
-def delete(alias, sub_nas, args):
+def na_delete(alias, sub_nas, args):
     """
     :param alias:
     :param sub_nas:
@@ -352,7 +352,7 @@ def delete(alias, sub_nas, args):
     return return_value(False,msg)
 
 
-def query(alias, sub_nas, args):
+def na_query(alias, sub_nas, args):
     """
     :param alias:
     :param sub_nas:
@@ -391,7 +391,7 @@ def query(alias, sub_nas, args):
     return return_value(False,msg)
 
 
-def alias_data(alias, sub_nas, args):
+def na_alias_data(alias, sub_nas, args):
     """
     :param alias:
     :param sub_nas:
