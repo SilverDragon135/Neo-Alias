@@ -17,12 +17,11 @@ def get_tests() -> []:
     #arguments
     [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'init','[]']],
 
-# NEP5 test
+#region NEP5 test
 
     [ [10000], #expected result
     #arguments
     [ path_to_avm, 'test', '0710', '02', 'True', 'False', 'balanceOf','["ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM"]']],
-
 
     [ [b'Neo Alias Coin'], #expected result
     #arguments
@@ -54,7 +53,7 @@ def get_tests() -> []:
 
     [ [b'Transfer completed.'], #expected result
     #arguments
-    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'transferFrom','["ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM", "AZRtyq1woyVP8va9uReGM3tsp7YtX33Nrw", 20]'],
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'transferFrom','["AZRtyq1woyVP8va9uReGM3tsp7YtX33Nrw", "ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM", "AZRtyq1woyVP8va9uReGM3tsp7YtX33Nrw", 20]'],
     1 ],
 
     [ [40], #expected result
@@ -67,9 +66,9 @@ def get_tests() -> []:
     [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'transfer','["AZRtyq1woyVP8va9uReGM3tsp7YtX33Nrw", "ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM", 40]'],
     1 ], # wallet id
 
-# end NEP5 test
+#endregion
 
-# NA - register test
+#region NA - register test
 
     [  [b'You can register alias only for yourself.'], #expected result
     #arguments
@@ -95,20 +94,86 @@ def get_tests() -> []:
     #arguments
     [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_register', '["'+test_neo_acc+'","ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM",4,"ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM",1519912704]']],
 
-#end NA - register test
+#endregion NA - register test
 
-# NA - querty test
+#region NA - querty test
 
     [  [bytearray(b'x\xc50\xe2V\xef\x8c\xd6\x0b\xf4+\x0f\xb9\x02\xe8\x9eFQ\xc7\xb7')], #expected result
     #arguments
     [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_query', '["'+test_neo_acc+'",4]']],
 
 
-    [  [b'Alias '+str.encode(test_neo_acc)+str.encode('a not found or expired.')], #expected result
+    [  [b'Alias '+str.encode(test_neo_acc)+b'a not found or expired.'], #expected result
     #arguments
     [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_query', '["'+test_neo_acc+'a",4]']],
 
-# end NA - querty test
+#endregion NA - querty test
+
+#region NA - alias data
+    
+    [  [[bytearray(b'x\xc50\xe2V\xef\x8c\xd6\x0b\xf4+\x0f\xb9\x02\xe8\x9eFQ\xc7\xb7'), bytearray(b'x\xc50\xe2V\xef\x8c\xd6\x0b\xf4+\x0f\xb9\x02\xe8\x9eFQ\xc7\xb7'), bytearray(b'\x00m|M'), bytearray(b'e\xfc\x88W'), bytearray(b'\x01'), bytearray(b'\x01'), bytearray(b''), bytearray(b''), bytearray(b''), bytearray(b'')]], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '10', 'True', 'False', 'na_alias_data', '["'+test_neo_acc+'",4]']],
+
+
+    [  [b'Alias '+str.encode(test_neo_acc)+str.encode('a not found or expired.')], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_alias_data', '["'+test_neo_acc+'a",4]']],
+#endregion NA - alias data
+
+#region NA - transfer
+    [  [b'Alias '+str.encode(test_neo_acc)+b' transfered to: \xc1\xab\x0e\xce\x99\xdbA\xfcCM\xbb\x18\x13\xf2\x04\xea{\xf5z`'], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_transfer', '["'+test_neo_acc+'","AZRtyq1woyVP8va9uReGM3tsp7YtX33Nrw",4]']],
+
+    [  [b'You do not own this alias, so you cannot invoke transfer'], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_transfer', '["'+test_neo_acc+'","AZRtyq1woyVP8va9uReGM3tsp7YtX33Nrw",4]']],
+
+    [  [b'Alias '+str.encode(test_neo_acc)+b' transfered to: x\xc50\xe2V\xef\x8c\xd6\x0b\xf4+\x0f\xb9\x02\xe8\x9eFQ\xc7\xb7'], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_transfer', '["'+test_neo_acc+'","ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM",4]'],
+    1 ],
+#endregion NA - transfer
+
+#region NA - update target 
+    [  [b'Alias target updated: \xc1\xab\x0e\xce\x99\xdbA\xfcCM\xbb\x18\x13\xf2\x04\xea{\xf5z`'], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_update_target', '["'+test_neo_acc+'","AZRtyq1woyVP8va9uReGM3tsp7YtX33Nrw",4]']],
+
+    [  [bytearray(b'\xc1\xab\x0e\xce\x99\xdbA\xfcCM\xbb\x18\x13\xf2\x04\xea{\xf5z`')], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_query', '["'+test_neo_acc+'",4]']],
+#endregion NA - update target 
+
+#region NA - renew
+    [  [b'Alias already payed for requested or maximum duration.'], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_renew', '["'+test_neo_acc+'","1519952704",4]']],
+
+    [  [ b'Alias registred: '+ str.encode(test_neo_acc)], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_register', '["'+test_neo_acc+'","ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM",0,"ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM",1468895301]']],
+                                                                                                                                                                          
+    [  [b'Alias renew success. New expiration: \xe56\x92W'], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_renew', '["'+test_neo_acc+'",1469200101,0]']],
+
+    [  [[bytearray(b'x\xc50\xe2V\xef\x8c\xd6\x0b\xf4+\x0f\xb9\x02\xe8\x9eFQ\xc7\xb7'), bytearray(b'x\xc50\xe2V\xef\x8c\xd6\x0b\xf4+\x0f\xb9\x02\xe8\x9eFQ\xc7\xb7'), bytearray(b'\xe56\x92W'), bytearray(b'e\xfc\x88W'), bytearray(b'\x01'), bytearray(b'\x01'), bytearray(b'\x01'), bytearray(b''), bytearray(b''), bytearray(b'')]], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '10', 'True', 'False', 'na_alias_data', '["'+test_neo_acc+'",0]']],
+
+#endregion NA - renew
+
+#region NA - delete
+    [  [b'Alias '+str.encode(test_neo_acc)+b' type \x04 deleted.'], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_delete', '["'+test_neo_acc+'",4]']],
+
+    [  [b'Alias '+str.encode(test_neo_acc)+b' not found or expired.'], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_query', '["'+test_neo_acc+'",4]']],
+#endregion NA - delete
 
     ]
 

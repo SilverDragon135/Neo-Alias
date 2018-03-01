@@ -7,6 +7,13 @@ from boa.compiler import Compiler
 import binascii
 import traceback
 
+def RunTestAndReturnResultWithRetryOnFailure(arguments,wallet, retries):
+    for i in range(0,retries):
+        try:
+            tx, result, total_ops, engine = LoadAndRun(arguments, wallet)
+            return result
+        except:
+            continue
 
 def RunTestAndReturnResult(arguments,wallet):
      tx, result, total_ops, engine = LoadAndRun(arguments, wallet)

@@ -1,11 +1,12 @@
 import os
 import time
-from wrappers.test_invoke_contract import BuildAndRun, LoadAndRun, RunTestAndReturnResult
+from wrappers.test_invoke_contract import BuildAndRun, LoadAndRun, RunTestAndReturnResult, RunTestAndReturnResultWithRetryOnFailure
 from configuration.private import path_to_root_script, path_to_avm, wallets
 from wrappers.wallet import init_wallets
 from wrappers.blockchain import init_blockchain
 from tests_to_run import get_tests
 from boa.compiler import Compiler
+from neo.VM.InteropService import Array
 
 #settings
 build = False
@@ -42,12 +43,21 @@ for test in tests:
     
     wallet_id = 0
     if len(test) > 2:
-        wallet_id = test[2]
-    result = RunTestAndReturnResult(arguments,test_wallets[wallet_id])
+        wallet_id = test[2]    
+    # sometimes it wont return result properly, so it is better to retry few times
+    result = RunTestAndReturnResultWithRetryOnFailure(arguments,test_wallets[wallet_id],5)
 
     expected_results = test[0]
     success = False
     for expected_result in expected_results:
+        if len(arguments) > 3 and arguments[3] == '10':
+            # the result is in this case neo.VM.InteropService.Array
+            # so we have to rebuild it to printable result :)
+            result_list = []
+            for item in result[0].GetArray():
+                result_list.append(item.GetByteArray())
+            result = result_list
+
         if result == expected_result:
             success_count += 1
             success = True
@@ -59,12 +69,12 @@ for test in tests:
     else:
         msg="Test n." + str(test_index) + " result (FAILED): " + str(result)
         try_print_msg(msg)
-        test_index += 1
+    test_index += 1
 
 
 for wallet in test_wallets:
     wallet.Close()
 
-print("=========================================================")
-print("Testing results (success/total): " + str(success_count) + "/" + str(test_count))
-print("=========================================================")
+try_print_msg("=========================================================")
+try_print_msg("Testing results (success/total): " + str(success_count) + "/" + str(test_count))
+try_print_msg("=========================================================")

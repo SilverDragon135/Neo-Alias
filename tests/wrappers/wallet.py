@@ -11,7 +11,7 @@ def init_wallets(wallets) -> []:
             print("Wallet file not found")
             quit()
     
-        print("Opening wallet: " + path)
+        #print("Opening wallet: " + path)
         password_key = to_aes_key(password)
         Wallet = UserWallet.Open(path, password_key)
         result.append(Wallet)

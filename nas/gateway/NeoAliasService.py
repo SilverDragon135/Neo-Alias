@@ -2,7 +2,7 @@
 from boa.blockchain.vm.Neo.Runtime import Notify
 from nas.core.na import *
 from nas.core.na_trade import *
-from nas.common.util import list_slice
+from nas.common.util import list_slice, return_value
 
 
 class NeoAliasGateway():
@@ -20,11 +20,11 @@ class NeoAliasGateway():
         :param args [ [alias_name, sub_nas],... ]:
         \nhandles NA service calls
         """
-     
         nargs = len(args)
-        if nargs < 1 and False:
-            Notify("Not enough arguments provided for service call.")
-            return False
+        if nargs < 1:
+            msg = "Not enough arguments provided for service call."
+            Notify(msg)
+            return return_value(False,msg)
         else:
             alias = args[0]
             sub_nas = None
@@ -64,3 +64,7 @@ class NeoAliasGateway():
                 return offer_buy(alias_name, sub_nas, args)
             elif operation == 'na_cancel_buy_offer':
                 return cancel_buy_offer(alias_name, sub_nas, args)
+            else:
+                msg = concat("Unknown operation: ", operation)
+                Notify(msg)
+                return return_value(False,msg)

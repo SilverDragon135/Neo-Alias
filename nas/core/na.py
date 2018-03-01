@@ -261,8 +261,10 @@ def na_transfer(alias, sub_nas, args):
         return call_sub_nas(sub_nas, "na_transfer", args)
 
     if nargs < 1:
-        Notify("Transfer requires new_alias_owner.")
-        return False
+        msg = concat("Transfer requires new_alias_owner.")
+        Notify(msg)
+        return return_value(False,msg)
+
     new_alias_owner = args[0]
     if nargs > 1:
         alias_type = args[1]

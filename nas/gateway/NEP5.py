@@ -77,7 +77,7 @@ class NEP5Gateway():
                 return balanceOf(address)
             return arg_error
 
-        elif operation == 'transfer' or operation == 'transferFrom' or operation == 'approve':
+        elif operation == 'transfer' or operation == 'approve':
             if nargs == 4:
                 return self.dynamic_NEP5_call(operation, args)
             if nargs == 3:
@@ -87,11 +87,21 @@ class NEP5Gateway():
                 if operation == 'transfer':
                     return transfer(t_from, t_to, t_amount)
 
-                if operation == 'transferFrom':
-                    return transfer_from(t_from, t_to, t_amount)
-
                 if operation == 'approve':
                     return approve(t_from, t_to, t_amount) # t_from => t_owner, t_to => t_spender
+            return arg_error
+        
+        elif operation == 'transferFrom':
+            if nargs == 5:
+                return self.dynamic_NEP5_call(operation, args)
+            if nargs == 4:
+                t_originator = args[0]
+                t_from = args[1]
+                t_to = args[2]
+                t_amount = args[3]
+
+                if operation == 'transferFrom':
+                    return transfer_from(t_originator, t_from, t_to, t_amount)
             return arg_error
 
         elif operation == 'allowance':

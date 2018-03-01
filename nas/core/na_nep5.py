@@ -69,7 +69,7 @@ def transfer(t_from, t_to, amount):
     return return_value(True, msg)
 
 
-def transfer_from(t_from, t_to, amount):
+def transfer_from(t_originator, t_from, t_to, amount):
     """
     :param t_from:
     :param t_to:
@@ -86,11 +86,14 @@ def transfer_from(t_from, t_to, amount):
     from_acc.address = t_from
     to_acc = Account()
     to_acc.address = t_to
-    
+    originator_acc = Account()
+    originator_acc.address = t_originator
+
     from_valid = from_acc.is_valid()
     to_valid = to_acc.is_valid()
+    originator_valid = originator_acc.is_valid()
 
-    if not from_valid or not to_valid:
+    if not from_valid or not to_valid or not originator_valid:
         msg = "Provided adresses are not in valid fromat (Expected length = 20)."
         Notify(msg)
         return return_value(False, msg)
@@ -100,12 +103,12 @@ def transfer_from(t_from, t_to, amount):
         Notify(msg)
         return return_value(False, msg)
 
-    if not CheckWitness(to_acc.address):
+    if not CheckWitness(originator_acc.address):
         msg = "Only owner of destination address can transferFrom!"
         Notify(msg)
         return return_value(False, msg)
 
-    available_to_to_addr = from_acc.approved_assets(to_acc)
+    available_to_to_addr = from_acc.approved_assets(originator_acc.address)
 
     if available_to_to_addr < amount:
         msg = "Insufficient funds approved"
@@ -118,7 +121,7 @@ def transfer_from(t_from, t_to, amount):
         return return_value(False, msg)
 
     from_acc.sub_available_assets(amount)
-    from_acc.sub_approved_assets(to_acc, amount)
+    from_acc.sub_approved_assets(originator_acc.address, amount)
     to_acc.add_available_assets(amount)
 
     msg = "Transfer completed."
@@ -166,7 +169,7 @@ def approve(t_owner, t_spender, amount):
     # cannot approve an amount that is
     # currently greater than the from balance
     if from_acc.available_assets() >= amount:
-        from_acc.approve_assets(to_acc, amount)
+        from_acc.approve_assets(to_acc.address, amount)
         ApproveEvent(t_owner, t_spender, amount)
         msg = concat("Spender can withdraw (from your address): ", amount)
         Notify(msg)
@@ -202,7 +205,7 @@ def allowance(t_owner, t_spender):
         Notify(msg)
         return return_value(False, msg)
 
-    _allowance = from_acc.approved_assets(to_acc)
+    _allowance = from_acc.approved_assets(to_acc.address)
     msg = concat("Spender can withdraw: ", _allowance)
     Notify(msg)
     return return_value(_allowance, msg)
