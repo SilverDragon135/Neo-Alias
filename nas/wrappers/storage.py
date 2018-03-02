@@ -103,8 +103,11 @@ class Storage:
         # now we need to know how many bytes the length of the array
         # will take to store
 
+        # for storing empty items in array we have to use zero byte
+        if stuff_len == 0:
+            byte_len = b'\x00'
         # this is one byte
-        if stuff_len <= 255:
+        elif stuff_len <= 255:
             byte_len = b'\x01'
         # two byte
         elif stuff_len <= 65535:
