@@ -111,7 +111,7 @@ def get_tests() -> []:
 
 #region NA - alias data
     
-    [  [[bytearray(b'x\xc50\xe2V\xef\x8c\xd6\x0b\xf4+\x0f\xb9\x02\xe8\x9eFQ\xc7\xb7'), bytearray(b'x\xc50\xe2V\xef\x8c\xd6\x0b\xf4+\x0f\xb9\x02\xe8\x9eFQ\xc7\xb7'), bytearray(b'\x00m|M'), bytearray(b'e\xfc\x88W'), bytearray(b'\x01'), bytearray(b'\x01'), bytearray(b''), bytearray(b''), bytearray(b''), bytearray(b'')]], #expected result
+    [  [[bytearray(b'x\xc50\xe2V\xef\x8c\xd6\x0b\xf4+\x0f\xb9\x02\xe8\x9eFQ\xc7\xb7'), bytearray(b'x\xc50\xe2V\xef\x8c\xd6\x0b\xf4+\x0f\xb9\x02\xe8\x9eFQ\xc7\xb7'), bytearray(b'\x00m|M'), bytearray(b'e\xfc\x88W'), bytearray(b''), bytearray(b''), bytearray(b''), bytearray(b''), bytearray(b''), bytearray(b'')]], #expected result
     #arguments
     [ path_to_avm, 'test', '0710', '10', 'True', 'False', 'na_alias_data', '["'+test_neo_acc+'",4]']],
 
@@ -159,7 +159,7 @@ def get_tests() -> []:
     #arguments
     [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_renew', '["'+test_neo_acc+'",1469200101,0]']],
 
-    [  [[bytearray(b'x\xc50\xe2V\xef\x8c\xd6\x0b\xf4+\x0f\xb9\x02\xe8\x9eFQ\xc7\xb7'), bytearray(b'x\xc50\xe2V\xef\x8c\xd6\x0b\xf4+\x0f\xb9\x02\xe8\x9eFQ\xc7\xb7'), bytearray(b'\xe56\x92W'), bytearray(b'e\xfc\x88W'), bytearray(b'\x01'), bytearray(b'\x01'), bytearray(b'\x01'), bytearray(b''), bytearray(b''), bytearray(b'')]], #expected result
+    [  [[bytearray(b'x\xc50\xe2V\xef\x8c\xd6\x0b\xf4+\x0f\xb9\x02\xe8\x9eFQ\xc7\xb7'), bytearray(b'x\xc50\xe2V\xef\x8c\xd6\x0b\xf4+\x0f\xb9\x02\xe8\x9eFQ\xc7\xb7'), bytearray(b'\xe56\x92W'), bytearray(b'e\xfc\x88W'), bytearray(b''), bytearray(b''), bytearray(b''), bytearray(b''), bytearray(b''), bytearray(b'')]], #expected result
     #arguments
     [ path_to_avm, 'test', '0710', '10', 'True', 'False', 'na_alias_data', '["'+test_neo_acc+'",0]']],
 
@@ -175,5 +175,41 @@ def get_tests() -> []:
     [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_query', '["'+test_neo_acc+'",4]']],
 #endregion NA - delete
 
+#region NA - trading
+
+    [  [b'Alias registred: custom_alias'+str.encode(test_neo_acc)], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_register', '["custom_alias'+test_neo_acc+'","AZRtyq1woyVP8va9uReGM3tsp7YtX33Nrw",0,"random_target",1519912704]'],
+    1 ],
+
+    [  [b'Put on sale.'], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_offer_sell', '["custom_alias'+test_neo_acc+'", 1000]'], 
+    1 ],
+
+    [  [[bytearray(b'random_target'), bytearray(b'\xc1\xab\x0e\xce\x99\xdbA\xfcCM\xbb\x18\x13\xf2\x04\xea{\xf5z`'), bytearray(b'\xe56\x92W'), bytearray(b'e\xfc\x88W'), bytearray(b''), bytearray(b''), bytearray(b''), bytearray(b''), bytearray(b'\x01'), bytearray(b'\xe8\x03')]], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '10', 'True', 'False', 'na_alias_data', '["custom_alias'+test_neo_acc+'"]']],
+
+    [  [b'Sold.'], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_offer_buy', '["custom_alias'+test_neo_acc+'", "ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM", "new_target", 1500, 1519912704 ]']],
+
+    [  [[bytearray(b'new_target'), bytearray(b'x\xc50\xe2V\xef\x8c\xd6\x0b\xf4+\x0f\xb9\x02\xe8\x9eFQ\xc7\xb7'), bytearray(b'\xe56\x92W'), bytearray(b'e\xfc\x88W'), bytearray(b''), bytearray(b''), bytearray(b''), bytearray(b''), bytearray(b''), bytearray(b'')]], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '10', 'True', 'False', 'na_alias_data', '["custom_alias'+test_neo_acc+'"]']],
+
+    [  [b'Alias custom_alias'+str.encode(test_neo_acc)+b' type  deleted.'], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_delete', '["custom_alias'+test_neo_acc+'"]'], 
+    ],
+
+    [ [b'Transfer completed.'], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'transfer','[ "AZRtyq1woyVP8va9uReGM3tsp7YtX33Nrw", "ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM", 1000]'],
+    1 ],
+
+
+#endregion NA - trading
     ]
 
