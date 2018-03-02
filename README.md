@@ -16,16 +16,7 @@ Neo alias is dapp built on NEO blockchain. The purpose of NA is to make the bloc
 
 # Testing without sub-nas support
 
-na.py - fully tested
--   na_register, na_renew, na_update_target,na_transfer, na_delete, na_query, na_alias_data
-
-na_trady.py 
--   na_offer_sell, na_cancel_sale_offer - tested
--   buy_offer was not yet tested, but should work
-
-NEP5.py
--   tested all API for coin info
--   transfers and approvals conform to NEP5 template - therfore should work properly
+All expcept SmartNEP5 and DynamicAppCall is already tested trough automated testing.
 
 SmartNEP5.py
 -   Even if biggest selling point of this dapp, wasnt tested yet.
