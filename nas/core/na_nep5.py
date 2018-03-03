@@ -71,6 +71,7 @@ def transfer(t_from, t_to, amount):
 
 def transfer_from(t_originator, t_from, t_to, amount):
     """
+    :parma t_originator:
     :param t_from:
     :param t_to:
     :param amount:

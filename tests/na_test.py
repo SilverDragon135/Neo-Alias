@@ -5,6 +5,7 @@ from configuration.private import path_to_root_script, path_to_avm, wallets
 from wrappers.wallet import init_wallets
 from wrappers.blockchain import init_blockchain
 from tests_to_run import get_tests
+from test_to_run_smart_NEP5 import get_smart_tests
 from boa.compiler import Compiler
 from neo.VM.InteropService import Array
 
@@ -13,12 +14,11 @@ build = False
 #settings
 
 def try_print_msg(msg):
-    while True: # there is bug in OSError: raw write() returned invalid length
-        try:
-            print(msg)
-            break
-        except:
-            continue
+    #while True: # there is bug in OSError: raw write() returned invalid length
+    try:
+        print(msg)
+    except:
+        pass
 
 if build:
     #BuildAndRun(path_to_root_script,[])
@@ -34,13 +34,17 @@ init_blockchain()
 test_wallets = init_wallets(wallets)
 
 print("Executing tests...")
+
 tests = get_tests()
+smart_tests = get_smart_tests()
+tests = tests + smart_tests
+
 test_count = len(tests)
 success_count = 0
 test_index = 1
 for test in tests:
     arguments = test[1]
-    
+
     wallet_id = 0
     if len(test) > 2:
         wallet_id = test[2]    

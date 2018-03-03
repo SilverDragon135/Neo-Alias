@@ -16,14 +16,13 @@ Neo alias is dapp built on NEO blockchain. The purpose of NA is to make the bloc
 
 # Testing without sub-nas support
 
-All expcept SmartNEP5 and DynamicAppCall is already tested trough automated testing.
+All core components if NA can be now tested trough automated testing.
 
-SmartNEP5.py
--   Even if biggest selling point of this dapp, wasnt tested yet.
-    Reason: we had problems with compiler and didn't have time for proper assets management testing. Neverthless the main funtionality is implemented and tested. The SmartNEP5 is just a gateway/showcase how to use core service and may be implemented as separate smart contract.
+The non-tested parts are DynamicAppCall and sub_nas support now. It seems like they won't be testable trough automated testing for now, at least until I find out way how automatize neo-gui from nel and find way how to grab results on the blockchain.  
 
 # Testing with sub-nas support
 
 Requirements:
 -   neo-gui from nel or other app to invoke script, which support sub inner arrays in parameters
--   uncomment section in NAS\gateway\NeoAliasService.py and NASC.py
+-   In ServiceConfiguration set support_sub_nas_call to True.
+
