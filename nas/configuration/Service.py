@@ -19,6 +19,7 @@ class ServiceConfiguration():
     """
     # debug constant to turn on/off debug messages
     debug = True
+    support_sub_nas_call = False
 
     def init(self):
         """

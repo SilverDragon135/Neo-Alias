@@ -66,15 +66,17 @@ def Main(operation, args):
             if nargs >= 1:
                 alias = args[0]
                 sub_nas = None
-                alias_name = alias
-                """ #uncomment for sub_nas testing
-                if len(alias) > 1:
-                    sub_nas = alias[1]
-                elif len(alias) == 0:
-                    Notify("Alias name not provided.")
-                    return False
-                alias_name = alias[0]
-                """
+
+                if configuration.support_sub_nas_call:
+                    if len(alias) > 1:
+                        sub_nas = alias[1]
+                    elif len(alias) == 0:
+                        Notify("Alias name not provided.")
+                        return False
+                    alias_name = alias[0]
+                else:
+                    alias_name = alias
+
                 if not alias_name:
                     Notify("Alias name not provided.")
                     return False

@@ -93,7 +93,7 @@ def na_register(alias, sub_nas, args):
     new_alias.save()
 
     RegisterAliasEvent(alias, alias_type, alias_owner, alias_target, alias_expiration)
-    msg = concat("Alias registred: ", alias)
+    msg = concat("Alias registered: ", alias)
     Notify(msg)
     return return_value(True,msg)
 
@@ -364,7 +364,6 @@ def na_query(alias, sub_nas, args):
     we try to query alias target
     """
     # handle sub_nas first
-
     nargs = len(args)
     if sub_nas:
         return call_sub_nas(sub_nas, "na_query", args)

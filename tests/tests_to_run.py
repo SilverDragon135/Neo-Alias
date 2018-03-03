@@ -85,7 +85,7 @@ def get_tests() -> []:
     [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_register', '["'+test_neo_acc+'","ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM",2,"ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM",1300000000]']],
 
 
-    [  [ b'Alias registred: '+ str.encode(test_neo_acc)], #expected result
+    [  [ b'Alias registered: '+ str.encode(test_neo_acc)], #expected result
     #arguments
     [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_register', '["'+test_neo_acc+'","ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM",4,"ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM",1300000000]']],
 
@@ -151,7 +151,7 @@ def get_tests() -> []:
     #arguments
     [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_renew', '["'+test_neo_acc+'","1519952704",4]']],
 
-    [  [ b'Alias registred: '+ str.encode(test_neo_acc)], #expected result
+    [  [ b'Alias registered: '+ str.encode(test_neo_acc)], #expected result
     #arguments
     [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_register', '["'+test_neo_acc+'","ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM",0,"ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM",1468895301]']],
                                                                                                                                                                           
@@ -177,7 +177,7 @@ def get_tests() -> []:
 
 #region NA - trading
 
-    [  [b'Alias registred: custom_alias'+str.encode(test_neo_acc)], #expected result
+    [  [b'Alias registered: custom_alias'+str.encode(test_neo_acc)], #expected result
     #arguments
     [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_register', '["custom_alias'+test_neo_acc+'","AZRtyq1woyVP8va9uReGM3tsp7YtX33Nrw",0,"random_target",1519912704]'],
     1 ],

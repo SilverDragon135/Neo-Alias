@@ -27,13 +27,11 @@ def list_slice(array, start, stop):
             start = 0 
         l = stop - start
         result = list(length = l)
-        i = 0
-        j = 0
-        for item in array:
-            if i >= start and i < stop:
-                result[j]=item
-                j+=1
-            i+=1
+        j = 0 
+        for i in range(start,stop):
+            item=array[i]
+            result[j] = item
+            j+=1
         return result
     else:
         return None

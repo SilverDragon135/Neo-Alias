@@ -3,6 +3,7 @@ from boa.blockchain.vm.Neo.Runtime import Notify
 from nas.core.na import *
 from nas.core.na_trade import *
 from nas.common.util import list_slice, return_value
+from nas.configuration.Service import ServiceConfiguration
 
 
 class NeoAliasGateway():
@@ -28,18 +29,20 @@ class NeoAliasGateway():
         else:
             alias = args[0]
             sub_nas = None
-            alias_name = alias
-            """ #uncomment to enable sub-nas support
-            if len(alias) > 1:
-                sub_nas = alias[1]
-            elif len(alias) == 0:
-                Notify("Alias name not provided.")
-                return False
-            alias_name = alias[0]
-            if not alias_name:
-                Notify("Alias name not provided.")
-                return False
-            """
+            configuration = ServiceConfiguration()
+            if configuration.support_sub_nas_call:
+                if len(alias) > 1:
+                    sub_nas = alias[1]
+                elif len(alias) == 0:
+                    Notify("Alias name not provided.")
+                    return False
+                alias_name = alias[0]
+                if not alias_name:
+                    Notify("Alias name not provided.")
+                    return False
+            else:
+                alias_name = alias    
+
             args = list_slice(args,1,nargs)
 
             if operation == 'na_register':
