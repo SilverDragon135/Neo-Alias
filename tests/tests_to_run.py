@@ -8,7 +8,7 @@ from configuration.private import path_to_avm
 
 timestamp = round(time.time())
 # We need this, because the register test would fail with static acc in the subsequent tests
-test_neo_acc = 'NEO' + str(round(time.time()))
+test_neo_acc = 'NEO'+ str(timestamp)[-8:]
 
 def get_tests() -> []:
     return [

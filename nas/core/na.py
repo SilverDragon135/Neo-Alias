@@ -5,7 +5,7 @@
 from boa.blockchain.vm.Neo.Runtime import Notify, CheckWitness
 from boa.blockchain.vm.Neo.Action import RegisterAction
 from nas.configuration.Service import ServiceConfiguration
-from nas.common.Alias import Alias, load_alias
+from nas.common.Alias import Alias, init_alias, load_alias
 from nas.core.util import call_sub_nas, try_pay_holding_fee
 from nas.common.util import get_header_timestamp, return_value
 from boa.code.builtins import concat
@@ -53,10 +53,7 @@ def na_register(alias, sub_nas, args):
             Notify(msg)
             return return_value(False,msg)
 
-    new_alias = Alias()
-    new_alias.name = alias
-    new_alias.atype = alias_type
-
+    new_alias = init_alias(alias,alias_type)    
    
     if new_alias.exists():
         new_alias = load_alias(new_alias)
@@ -132,9 +129,7 @@ def na_renew(alias, sub_nas, args):
             Notify(msg)
             return return_value(False,msg)
 
-    alias_for_renewal = Alias()
-    alias_for_renewal.name = alias
-    alias_for_renewal.atype = alias_type
+    alias_for_renewal = init_alias(alias,alias_type)
 
     if not alias_for_renewal.exists():
         msg = concat("Alias not found: ", alias)
@@ -212,9 +207,7 @@ def na_update_target(alias, sub_nas, args):
     else:
         alias_type = 0
 
-    alias_to_update = Alias()
-    alias_to_update.name = alias
-    alias_to_update.atype = alias_type
+    alias_to_update = init_alias(alias,alias_type)
 
     if not alias_to_update.exists():
         msg = concat("Alias not found: ", alias)
@@ -271,9 +264,7 @@ def na_transfer(alias, sub_nas, args):
     else:
         alias_type = 0
 
-    alias_to_transfer = Alias()
-    alias_to_transfer.name = alias
-    alias_to_transfer.atype = alias_type
+    alias_to_transfer = init_alias(alias,alias_type)
 
     if not alias_to_transfer.exists():
         msg = concat("Alias not found: ", alias)
@@ -325,9 +316,7 @@ def na_delete(alias, sub_nas, args):
     else:
         alias_type = 0
 
-    alias_to_delete = Alias()
-    alias_to_delete.name = alias
-    alias_to_delete.atype = alias_type
+    alias_to_delete = init_alias(alias,alias_type)
     
     if not alias_to_delete.exists():
         msg = concat("Alias not found: ", alias)
@@ -373,9 +362,7 @@ def na_query(alias, sub_nas, args):
     else:
         alias_type = 0
 
-    stored_alias = Alias()
-    stored_alias.name = alias
-    stored_alias.atype = alias_type
+    stored_alias = init_alias(alias,alias_type)
     
     if stored_alias.exists():
         stored_alias = load_alias(stored_alias)
@@ -411,9 +398,8 @@ def na_alias_data(alias, sub_nas, args):
     else:
         alias_type = 0
 
-    stored_alias = Alias()
-    stored_alias.name = alias
-    stored_alias.atype = alias_type
+    stored_alias = init_alias(alias,alias_type)
+
     if stored_alias.exists() :
         stored_alias = load_alias(stored_alias)
         if not stored_alias.expired():

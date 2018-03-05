@@ -68,11 +68,11 @@ In case CoZ will be interested in becoming NAA, the 5% reserved to CoZ will be m
 # Neo Account
 Neo account was inspired by PASC. It targets to simplify standard adress operations. Supports all NEP5 methods. Neo accounts will be tradable, non-expirable and free of charge. 
 
-It is assitiation between address and account alias in form of string starting with NEO and followed by numbers.
+It is assitiation between address and account alias in form of string starting with NEO and followed by numbers. (The - cannot be passed to NA, and it should be only for increasing readability)
 Examples:
-- NEO0
-- NEO240000000015547754
-- NEO266887488999977453
+- NEO0 or NEO-0
+- NEO240000000015547754 or NEO-240000000015547754
+- NEO266887488999977453 or NEO-266887488999977453
 
 # Neo Account ICO Reservation
 - NEO9 reserved for founder(me :)

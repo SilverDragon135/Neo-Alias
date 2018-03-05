@@ -8,7 +8,7 @@ from nas.core.util import call_sub_nas, get_header_timestamp
 from nas.configuration.Service import ServiceConfiguration
 from nas.common.Account import Account
 from nas.core.na_fee_pool import FeesPool
-from nas.common.Alias import Alias, load_alias
+from nas.common.Alias import Alias,init_alias, load_alias
 from nas.common.util import return_value
 
 SellOfferEvent = RegisterAction('putOnSale', 'alias_name', 'alias_type', 'price')
@@ -44,9 +44,8 @@ def offer_sell(alias, sub_nas, args):
         msg = "Price lower than 0."
         Notify(msg)
         return msg
-    alias_to_sell = Alias()
-    alias_to_sell.name = alias
-    alias_to_sell.atype = alias_type
+
+    alias_to_sell = init_alias(alias,alias_type)
 
     if not alias_to_sell.exists():
         msg = concat("Alias not found: ", alias)
@@ -121,9 +120,8 @@ def cancel_sale_offer(alias, sub_nas, args):
         alias_type = args[0]
     else:
         alias_type = 0
-    alias_on_sale = Alias()
-    alias_on_sale.name = alias
-    alias_on_sale.atype = alias_type
+
+    alias_on_sale = init_alias(alias,alias_type)
 
     if not alias_on_sale.exists():
         msg = concat("Alias not found: ", alias)
@@ -175,9 +173,7 @@ def offer_buy(alias, sub_nas, args):
     buy_offer_price = args[2]
     buy_offer_expiration = args[3]
 
-    alias_to_buy = Alias()
-    alias_to_buy.name = alias
-    alias_to_buy.atype = alias_type
+    alias_to_buy = init_alias(alias,alias_type)
 
     if not alias_to_buy.exists():
         msg = concat("Alias not found: ", alias)
@@ -286,9 +282,8 @@ def cancel_buy_offer(alias, sub_nas, args):
         alias_type = args[0]
     else:
         alias_type = 0
-    alias_with_buy_offer = Alias()
-    alias_with_buy_offer.name = alias
-    alias_with_buy_offer.atype = alias_type
+        
+    alias_with_buy_offer = init_alias(alias,alias_type)
 
     if not alias_with_buy_offer.exists():
         msg = concat("Alias not found: ", alias)

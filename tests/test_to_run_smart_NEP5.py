@@ -8,8 +8,8 @@ from configuration.private import path_to_avm
 
 timestamp = round(time.time())
 # We need this, because the register test would fail with static acc in the subsequent tests
-test_neo_acc1 = 'NEO' + str(round(time.time()))
-test_neo_acc2 = 'NEO' + str(round(time.time())+10)
+test_neo_acc1 = 'NEO' + str(str(timestamp)[-8:])
+test_neo_acc2 = 'NEO' + str(str(timestamp+10)[-8:])
 
 def get_smart_tests() -> []:
     return [

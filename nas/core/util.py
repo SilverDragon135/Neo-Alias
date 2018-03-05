@@ -9,7 +9,7 @@ from nas.core.na_fee_pool import FeesPool
 from nas.configuration.Service import ServiceConfiguration
 from nas.common.Account import Account
 from nas.common.util import get_header_timestamp, return_value
-from nas.common.Alias import Alias, load_alias
+from nas.common.Alias import Alias,init_alias, load_alias
 
 from boa.code.builtins import concat
 
@@ -21,9 +21,7 @@ def call_sub_nas(sub_nas, operation, args):
     \n:returns True if success or False if failed:
     \ntryes to resolve sub_nas alias and pass call to resolved sub_nas
     """
-    sub_nas_alias = Alias()
-    sub_nas_alias.name = sub_nas
-    sub_nas_alias.atype = 2
+    sub_nas_alias = init_alias(sub_nas,2)
 
     if not sub_nas_alias.exists():
         msg = concat("Alias not found: ", sub_nas)

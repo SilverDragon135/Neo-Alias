@@ -91,21 +91,8 @@ class Alias():
             acc = self.name
             acc_prefix = acc[0:3] 
             l = len(acc)
-            if acc_prefix != "NEO":
+            if acc_prefix != "NEO" or l != 11:# prefix + 64-bit unsigned integer (8 bytes)
                 return False
-            acc_number = acc[3:l] 
-            l = len(acc_number)
-            i = 1
-            j = 0
-            # this is only way I made it do, what I want :/
-            # dont know why, but it didnt worked when I starte check from begining :/
-            digit = acc_number[l-i:l-j]
-            while digit and l-i >= 0:
-                digit = acc_number[l-i:l-j]
-                if digit < "0" or digit > "9":
-                    return False
-                i+=1
-                j= i - 1
         return True
 
     def target_valid(self):
@@ -181,6 +168,13 @@ class Alias():
         key = concat(prefix, self.name)
         storage = Storage()
         storage.delete(key)
+
+
+def init_alias(name,atype) -> Alias:
+    alias = Alias()
+    alias.name = name    
+    alias.atype = atype
+    return alias
 
 # At this point I was failing with load(self) method inside Alias class
 # Seems like class methods cannot assign class properties
