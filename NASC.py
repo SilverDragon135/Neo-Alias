@@ -1,7 +1,6 @@
 from boa.blockchain.vm.Neo.Runtime import Notify, GetTrigger, CheckWitness, Log
 from boa.blockchain.vm.Neo.Action import RegisterAction
 from boa.blockchain.vm.Neo.TriggerType import Application, Verification
-from boa.blockchain.vm.Neo.App import DynamicAppCall
 
 from nas.gateway.NEP5 import NEP5Gateway
 from nas.gateway.SmartNEP5 import SmartNEP5Gateway
@@ -10,6 +9,7 @@ from nas.configuration.Administration import AdminConfiguration
 from nas.configuration.Service import ServiceConfiguration
 from nas.core.na import na_query
 from nas.common.util import list_slice
+from nas.gateway.SC import call_remote_smart_contract
 
 def Main(operation, args):
     """
@@ -33,14 +33,15 @@ def Main(operation, args):
 
     elif trigger == Application:
         nargs = len(args)
-        if operation != None:
 
+        if operation != None:
             configuration = ServiceConfiguration()
-            if not configuration.initialized():
-                if operation == 'init':
-                    return configuration.init()
-                Notify("NASC is not yet initialized.")
-                return False
+            
+            #if not configuration.initialized():
+            #    if operation == 'init':
+            #        return configuration.init()
+            #    Notify("NASC is not yet initialized.")
+            #    return False
 
             # just for testing
             if operation == 'na_test':
@@ -65,27 +66,9 @@ def Main(operation, args):
             
             if nargs >= 1:
                 alias = args[0]
-                sub_nas = None
-
-                if configuration.support_sub_nas_call:
-                    if len(alias) > 1:
-                        sub_nas = alias[1]
-                    elif len(alias) == 0:
-                        Notify("Alias name not provided.")
-                        return False
-                    alias_name = alias[0]
-                else:
-                    alias_name = alias
-
-                if not alias_name:
-                    Notify("Alias name not provided.")
-                    return False
                 args = list_slice(args,1,nargs)
-                sc = na_query(alias_name, sub_nas, args)
-                if sc:
-                    return DynamicAppCall(sc, operation, args)
-                else:
-                    Notify("SC call failed. Possible reasons: no exists or expired, not in provided NA.")
-                    return False
-
+                
+                sc = alias
+                return call_remote_smart_contract(alias,operation,args)
+                
         return "Uknown operation"

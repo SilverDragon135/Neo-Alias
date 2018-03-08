@@ -46,7 +46,7 @@ def return_value(non_debug, debug):
     non debug messages in mainnet
     """
     configuration = ServiceConfiguration()
-    if configuration.debug:
+    if configuration.NA_DEBUG:
         return debug
     else: 
         return non_debug

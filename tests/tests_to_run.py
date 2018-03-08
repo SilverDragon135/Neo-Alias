@@ -74,6 +74,10 @@ def get_tests() -> []:
     #arguments
     [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_register', '["'+test_neo_acc+'","AZ2YnqDxPffU2bRtkh1eod19QJ3uho5bTD",4,"ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM",1519912704]']],
 
+    [  [b'You can register alias only for yourself.'], #expected result
+    #arguments
+    [ path_to_avm, 'test', '0710', '05', 'True', 'False', 'na_register', '["hello_world2","AZ2YnqDxPffU2bRtkh1eod19QJ3uho5bTD",2,b"\x92v9\x9e\xb7\xc2As\xc4\x03\xda\xd1\xd1\x8b\x1c\xf6\x1b9\xab\xac",1519912704]']],
+
 
     [  [bytearray(b'This alias cannot be registered. Invalid name or target property for given alias_type.')], #expected result
     #arguments

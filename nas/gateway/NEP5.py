@@ -5,6 +5,7 @@ from nas.core.na_nep5 import *
 from nas.configuration.TokenInfo import Token
 from nas.common.Account import Account
 from nas.common.util import list_slice
+from nas.gateway.SC import call_remote_smart_contract
 
 
 
@@ -26,23 +27,8 @@ class NEP5Gateway():
         """
         nargs = len(args)
         alias = args[0]
-        sub_nas = None
-        if alias and len(alias) > 1:
-            sub_nas = alias[1]
-        elif len(alias) == 0:
-            Notify("Alias name not provided.")
-            return False
-        alias_name = alias[0]
-        if not alias_name:
-            Notify("Alias name not provided.")
-            return False
         args = list_slice(args, 1, nargs)
-        to_invoke = na_query(alias_name, sub_nas, 2)  # script hash or asset id ?
-        if to_invoke:
-            return DynamicAppCall(to_invoke, operation, args)
-        else:
-            Notify("NEP5 DynamicAppCall failed.")
-            return False
+        return call_remote_smart_contract(alias,operation,args)
 
     def handle_NEP5_call(self, operation, args):
         """

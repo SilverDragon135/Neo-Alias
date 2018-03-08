@@ -6,6 +6,7 @@ from wrappers.wallet import init_wallets
 from wrappers.blockchain import init_blockchain
 from tests_to_run import get_tests
 from test_to_run_smart_NEP5 import get_smart_tests
+from contracts.contract_test import get_contract_tests
 from boa.compiler import Compiler
 from neo.VM.InteropService import Array
 
@@ -39,6 +40,7 @@ tests = get_tests()
 smart_tests = get_smart_tests()
 tests = tests + smart_tests
 
+#tests = get_contract_tests()
 test_count = len(tests)
 success_count = 0
 test_index = 1

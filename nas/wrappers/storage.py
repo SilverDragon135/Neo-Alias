@@ -1,5 +1,5 @@
 from boa.blockchain.vm.Neo.Storage import GetContext, Get, Put, Delete
-from boa.code.builtins import concat, range
+from boa.builtins import concat, range
 
 
 class Storage:

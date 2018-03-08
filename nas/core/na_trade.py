@@ -3,13 +3,12 @@ Module Trade - alias trading implementation
 """
 from boa.blockchain.vm.Neo.Runtime import Notify, CheckWitness
 from boa.blockchain.vm.Neo.Action import RegisterAction
-from boa.code.builtins import concat
-from nas.core.util import call_sub_nas, get_header_timestamp
+from boa.builtins import concat
 from nas.configuration.Service import ServiceConfiguration
 from nas.common.Account import Account
 from nas.core.na_fee_pool import FeesPool
 from nas.common.Alias import Alias,init_alias, load_alias
-from nas.common.util import return_value
+from nas.common.util import return_value, get_header_timestamp
 
 SellOfferEvent = RegisterAction('putOnSale', 'alias_name', 'alias_type', 'price')
 CancelSellOfferEvent = RegisterAction('cancelOnSale', 'alias_name', 'alias_type')
@@ -19,19 +18,14 @@ CancelBuyOfferEvent = RegisterAction('cancelBuyOffer', 'alias_name', 'alias_type
 TradeSuccesfullEvent = RegisterAction('trade', 'alias_name', 'alias_type', 'old_owne', 'new_owner', 'price')
 
 
-def offer_sell(alias, sub_nas, args):
+def offer_sell(alias, args):
     """
     :param alias:
-    :param sub_nas:
     \n:param args [price, type]:
     \n:returns True if success or False if failed:
-    \nif sub_nas defined passes call to sub_nas otherwise
-    we try to put alias on sale
     """
     nargs = len(args)
-    if sub_nas:
-        return call_sub_nas(sub_nas, "offer_sell", args)
-    elif nargs < 1:
+    if nargs < 1:
         msg = "Not enough args provided. Requres prices."
         Notify(msg)
         return msg
@@ -104,19 +98,13 @@ def offer_sell(alias, sub_nas, args):
     return return_value(True, msg)
 
 
-def cancel_sale_offer(alias, sub_nas, args):
+def cancel_sale_offer(alias, args):
     """
     :param alias:
-    :param sub_nas:
     \n:param args [type]:
     \n:returns True if success or False if failed:
-    \nif sub_nas defined passes call to sub_nas otherwise
-    we try to cancel alias on sale
     """
-    nargs = len(args)
-    if sub_nas:
-        return call_sub_nas(sub_nas, "cancel_sale_offer", args)
-    elif nargs > 0:
+    if len(args) > 0:
         alias_type = args[0]
     else:
         alias_type = 0
@@ -149,19 +137,14 @@ def cancel_sale_offer(alias, sub_nas, args):
     return return_value(True, msg)
 
 
-def offer_buy(alias, sub_nas, args):
+def offer_buy(alias, args):
     """
     :param alias:
-    :param sub_nas:
     \n:param args [owner, target, price, expiration]:
     \n:returns True if success or False if failed:
-    \nif sub_nas defined passes call to sub_nas otherwise
-    we try to place buy offer for alias
     """
     nargs = len(args)
-    if sub_nas:
-        return call_sub_nas(sub_nas, "offer_buy", args)
-    elif nargs < 4:
+    if nargs < 4:
         Notify("Not enough args provided. Requres buy_offer_owner,buy_offer_target,buy_offer_price, buy_offer_expiration.")
         return False
     elif nargs > 4:
@@ -266,19 +249,13 @@ def offer_buy(alias, sub_nas, args):
     return return_value(True, msg)
 
 
-def cancel_buy_offer(alias, sub_nas, args):
+def cancel_buy_offer(alias, args):
     """
     :param alias:
-    :param sub_nas:
     \n:param args [type]:
     \n:returns True if success or False if failed:
-    \nif sub_nas defined passes call to sub_nas otherwise
-    we try to cancel buy offer
     """
-    nargs = len(args)
-    if sub_nas:
-        return call_sub_nas(sub_nas, "cancel_sale_offer", args)
-    elif nargs > 0:
+    if len(args) > 0:
         alias_type = args[0]
     else:
         alias_type = 0

@@ -1,8 +1,8 @@
 from boa.blockchain.vm.Neo.Runtime import Notify
-from nas.core.na import na_query
 from nas.gateway.NEP5 import NEP5Gateway
 from nas.common.util import return_value
 from nas.configuration.Service import ServiceConfiguration
+from nas.gateway.NeoAliasService import NeoAliasGateway
 
 
 class SmartNEP5Gateway():
@@ -25,6 +25,7 @@ class SmartNEP5Gateway():
         \n:all parameters are considered NEO accounts - type 4:
         """
         nep5_service = NEP5Gateway()
+        nas_gateway = NeoAliasGateway()
         arg_error = "Not enough arguments provided."
         nargs = len(args)
         configuration = ServiceConfiguration()
@@ -39,23 +40,10 @@ class SmartNEP5Gateway():
                     return return_value(False,msg)
             else:
                 return arg_error
-
-            nargs = len(args)
-            sub_nas = b''
-
-            if configuration.support_sub_nas_call and len(acc_alias) > 1:
-                sub_nas = acc_alias[1]
-                acc_alias_name = acc_alias[0]
-            else:
-                acc_alias_name = acc_alias
-
-            if not acc_alias_name:
-                msg = "Acc alias name not provided."
-                Notify(msg)
-                return return_value(False,msg)
             
-            alias_type_arg = [4]
-            address = na_query(acc_alias_name, sub_nas, alias_type_arg)
+            four = 4 # this is interesting, contract fails if [acc_alias, 4]
+            query_args = [acc_alias,four]
+            address = nas_gateway.handle_service_call("na_query",query_args)
 
             if address:
                 args[index_last] = address
@@ -73,30 +61,11 @@ class SmartNEP5Gateway():
             else:
                 return arg_error
 
-
-            sub_nas_from = b''
-            sub_nas_to = b''
-
-            if configuration.support_sub_nas_call:
-                # check if sub_nas_query needed
-                if len(t_from_alias) > 1:
-                    sub_nas_from = t_from_alias[1]
-                if len(t_to_alias) > 1:
-                    sub_nas_to = t_to_alias[1]
-
-                from_alias_name = t_from_alias[0]
-                to_alias_name = t_to_alias[0]
-            else:
-                from_alias_name = t_from_alias
-                to_alias_name = t_to_alias
-
-            if not from_alias_name or not to_alias_name:
-                Notify("Acc alias name not provided.")
-                return False
-
-            alias_type_arg = [4]
-            address_from = na_query(from_alias_name, sub_nas_from, alias_type_arg)
-            address_to = na_query(to_alias_name, sub_nas_to, alias_type_arg)
+            four = 4 # this is interesting, contract fails if [acc_alias, 4]
+            query_args = [t_from_alias, four]
+            address_from = nas_gateway.handle_service_call("na_query",query_args)
+            query_args = [t_to_alias, four]
+            address_to = nas_gateway.handle_service_call("na_query",query_args)
 
             if address_from and address_to:
                 args[index_3rd_to_last] = address_from
@@ -120,35 +89,13 @@ class SmartNEP5Gateway():
             else:
                 return arg_error
 
-            sub_nas_originator=b''
-            sub_nas_from = b''
-            sub_nas_to = b''
-
-            if configuration.support_sub_nas_call:
-                # check if sub_nas_query needed
-                if len(t_originator_alias) > 1:
-                    sub_nas_originator = t_originator_alias[1]
-                if len(t_from_alias) > 1:
-                    sub_nas_from = t_from_alias[1]
-                if len(t_to_alias) > 1:
-                    sub_nas_to = t_to_alias[1]
-
-                originator_alias_name = t_originator_alias[0]
-                from_alias_name = t_from_alias[0]
-                to_alias_name = t_to_alias[0]
-            else:
-                originator_alias_name = t_originator_alias
-                from_alias_name = t_from_alias
-                to_alias_name = t_to_alias
-
-            if not originator_alias_name or not from_alias_name or not to_alias_name:
-                Notify("Acc alias name not provided.")
-                return False
-
-            alias_type_arg = [4]
-            address_originator = na_query(originator_alias_name, sub_nas_originator, alias_type_arg)
-            address_from = na_query(from_alias_name, sub_nas_from, alias_type_arg)
-            address_to = na_query(to_alias_name, sub_nas_to, alias_type_arg)
+            four = 4 # this is interesting, contract fails if [acc_alias, 4]
+            query_args = [t_originator_alias, four]
+            address_originator = nas_gateway.handle_service_call("na_query",query_args)
+            query_args = [t_from_alias, four]
+            address_from = nas_gateway.handle_service_call("na_query",query_args)
+            query_args = [t_to_alias, four]
+            address_to = nas_gateway.handle_service_call("na_query",query_args)
 
             if address_originator and address_from and address_to:
                 args[index_4th_to_last] = address_originator
@@ -168,34 +115,17 @@ class SmartNEP5Gateway():
             else:
                 return arg_error
 
-
-            sub_nas_from = b''
-            sub_nas_to = b''
-
-            if configuration.support_sub_nas_call:
-                # check if sub_nas_query needed
-                if len(t_from_alias) > 1:
-                    sub_nas_from = t_from_alias[1]
-                if len(t_to_alias) > 1:
-                    sub_nas_to = t_to_alias[1]
-
-                from_alias_name = t_from_alias[0]
-                to_alias_name = t_to_alias[0]
-            else:
-                from_alias_name = t_from_alias
-                to_alias_name = t_to_alias
-
-            if not from_alias_name or not to_alias_name:
-                Notify("Acc alias name not provided.")
-                return False
-
-            alias_type_arg = [4]
-            address_from = na_query(from_alias_name, sub_nas_from, alias_type_arg)
-            address_to = na_query(to_alias_name, sub_nas_to, alias_type_arg)
+            four = 4 # this is interesting, contract fails if [acc_alias, 4]
+            query_args = [t_from_alias, four]
+            address_from = nas_gateway.handle_service_call("na_query",query_args)
+            query_args = [t_to_alias, four]
+            address_to = nas_gateway.handle_service_call("na_query",query_args)
 
             if address_from and address_to:
                 args[index_2nd_to_last] = address_from
                 args[index_1st_to_last] = address_to
                 return nep5_service.handle_NEP5_call("allowance",args)
         
-        return "One or both accounts not resolved."
+        msg = "Smart NEP5 call failed."
+        Notify(msg)
+        return return_value(False,msg)

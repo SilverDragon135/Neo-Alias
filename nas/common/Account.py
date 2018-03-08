@@ -1,7 +1,7 @@
 """
 addressounts module - addressounts management
 """
-from boa.code.builtins import concat
+from boa.builtins import concat
 from nas.wrappers.storage import Storage
 
 

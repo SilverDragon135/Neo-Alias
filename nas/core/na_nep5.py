@@ -1,6 +1,6 @@
 from boa.blockchain.vm.Neo.Runtime import Notify, CheckWitness
 from boa.blockchain.vm.Neo.Action import RegisterAction
-from boa.code.builtins import concat
+from boa.builtins import concat
 from nas.common.Account import Account
 from nas.common.util import return_value
 

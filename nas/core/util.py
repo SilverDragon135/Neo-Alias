@@ -4,40 +4,59 @@ Modul util - contains derived methods for calculation
 
 from boa.blockchain.vm.Neo.App import DynamicAppCall
 from boa.blockchain.vm.Neo.Runtime import Notify
-from boa.code.builtins import list
+from boa.builtins import list
 from nas.core.na_fee_pool import FeesPool
 from nas.configuration.Service import ServiceConfiguration
 from nas.common.Account import Account
 from nas.common.util import get_header_timestamp, return_value
 from nas.common.Alias import Alias,init_alias, load_alias
 
-from boa.code.builtins import concat
+from boa.builtins import concat
 
-def call_sub_nas(sub_nas, operation, args):
+def call_remote_smart_contract(alias_info, operation, args):
     """
-    :param sub_nas:
+    :param alias_info:
     :param operation:
     \n:param args []:
     \n:returns True if success or False if failed:
-    \ntryes to resolve sub_nas alias and pass call to resolved sub_nas
+    \ntryes to resolve alias_info and pass call to resolved smartcontract
+    \nin case of sub_nas support alias_info is array [alias, sub_nas]
     """
-    sub_nas_alias = init_alias(sub_nas,2)
+    
+    sc = nas_gateway.handle_service_call("na_query",query_args)
+                
+    if sc:
+        return DynamicAppCall(sc, operation, args)
+    else:
+        Notify("SC call failed. Possible reasons: no exists or expired, not in provided NA.")
+        return False
 
-    if not sub_nas_alias.exists():
-        msg = concat("Alias not found: ", sub_nas)
-        Notify(msg)
-        return return_value(False,msg)
-   
-    sub_nas_alias = load_alias(sub_nas_alias)
 
-    if sub_nas_alias.expired():
-        msg = concat("Alias expired: ", sub_nas)
-        Notify(msg)
-        return return_value(False,msg)
+    if nargs >= 1:
+        alias = args[0]
+        sub_nas = None
 
-    # pass register call tu sub Neo alias service
-    target = sub_nas_alias.target
-    return DynamicAppCall(target, operation, args)
+    if configuration.support_sub_nas_call:
+        if len(alias) > 1:
+            sub_nas = alias[1]
+        elif len(alias) == 0:
+            Notify("Alias name not provided.")
+            return False
+        alias_name = alias[0]
+    else:
+        alias_name = alias
+
+    if not alias_name:
+        Notify("Alias name not provided.")
+        return False
+    args = list_slice(args,1,nargs)
+    sc = alias
+    #sc = na_query(alias_name, sub_nas, args)
+    if sc:
+        return DynamicAppCall(sc, operation, args)
+    else:
+        Notify("SC call failed. Possible reasons: no exists or expired, not in provided NA.")
+        return False
 
 def try_pay_holding_fee(owner, alias_type, duration_to_pay):
     """

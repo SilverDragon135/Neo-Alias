@@ -6,7 +6,7 @@ Holds Alias structures
 
 
 from nas.wrappers.storage import Storage
-from boa.code.builtins import concat, list
+from boa.builtins import concat, list
 from boa.blockchain.vm.Neo.Runtime import Notify, CheckWitness
 from nas.configuration.Service import ServiceConfiguration
 from nas.common.util import get_header_timestamp

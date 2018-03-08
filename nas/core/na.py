@@ -6,9 +6,9 @@ from boa.blockchain.vm.Neo.Runtime import Notify, CheckWitness
 from boa.blockchain.vm.Neo.Action import RegisterAction
 from nas.configuration.Service import ServiceConfiguration
 from nas.common.Alias import Alias, init_alias, load_alias
-from nas.core.util import call_sub_nas, try_pay_holding_fee
+from nas.core.util import try_pay_holding_fee
 from nas.common.util import get_header_timestamp, return_value
-from boa.code.builtins import concat
+from boa.builtins import concat
 from nas.wrappers.storage import Storage
 
 RegisterAliasEvent = RegisterAction('configurationUpdated', 'name', 'type', 'owner', 'target', 'expiration')
@@ -19,20 +19,15 @@ DeleteAliasEvent = RegisterAction('deleteAlias', 'name', 'type')
 QueryAliasEvent = RegisterAction('queryAlias', 'name', 'type', 'result')
 
 
-def na_register(alias, sub_nas, args):
+def na_register(alias, args):
     """
     :param alias:
-    :param sub_nas:
     \n:param args [owner, type, target, expiration]:
     \n:returns expiration if success or False if failed:
     \nif sub_nas defined passes call to sub_nas otherwise
     we try to register alias
     """
-    # resolve sub_nas situation first
-    nargs = len(args)
-    if sub_nas:
-        return call_sub_nas(sub_nas, "na_register", args)
-    elif nargs < 4:
+    if len(args) < 4:
         Notify("Not enough arguments provided. Requires: alias_owner, alias_type, alias_target, alias_expiration")
         return False
     
@@ -40,11 +35,14 @@ def na_register(alias, sub_nas, args):
     alias_type = args[1]
     alias_target = args[2]
     alias_expiration = args[3]
+    
+    valid = False
+    if len(alias_owner) == 20:
+        if CheckWitness(alias_owner):
+            valid = True
+    else:
+        pass
 
-    if not CheckWitness(alias_owner):
-        msg = "You can register alias only for yourself."
-        Notify(msg)
-        return return_value(False,msg)
 
     configuration = ServiceConfiguration()
     if alias_expiration < get_header_timestamp():
@@ -95,19 +93,15 @@ def na_register(alias, sub_nas, args):
     return return_value(True,msg)
 
 
-def na_renew(alias, sub_nas, args):
+def na_renew(alias, args):
     """
     :param alias:
-    :param sub_nas:
     \n:param args [expiration, type]:
     \n:returns new expiration if success or False if failed:
     \nif sub_nas defined passes call to sub_nas otherwise
     we try to renew alias
     """
-    # handle sub_nas first
     nargs = len(args)
-    if sub_nas:
-        return call_sub_nas(sub_nas, "na_renew", args)
 
     configuration = ServiceConfiguration()
     if nargs < 1:
@@ -185,18 +179,15 @@ def na_renew(alias, sub_nas, args):
     return return_value(alias_expiration,msg)
 
 
-def na_update_target(alias, sub_nas, args):
+def na_update_target(alias, args):
     """
     :param alias:
-    :param sub_nas:
     \n:param args [target, type]:
     \n:returns True if success or False if failed:
     \nif sub_nas defined passes call to sub_nas otherwise
     we try to setup new target
     """
     nargs = len(args)
-    if sub_nas:
-        return call_sub_nas(sub_nas, "na_update_target", args)
 
     if nargs < 1:
         Notify("update_target requires alias_target.")
@@ -239,19 +230,15 @@ def na_update_target(alias, sub_nas, args):
     return return_value(True,msg)
 
 
-def na_transfer(alias, sub_nas, args):
+def na_transfer(alias, args):
     """
     :param alias:
-    :param sub_nas:
     \n:param args [new_owner, type]:
     \n:returns True if success or False if failed:
     \nif sub_nas defined passes call to sub_nas otherwise
     we try to transfer alias
     """
-    # handle sub_nas first
     nargs = len(args)
-    if sub_nas:
-        return call_sub_nas(sub_nas, "na_transfer", args)
 
     if nargs < 1:
         msg = concat("Transfer requires new_alias_owner.")
@@ -299,19 +286,15 @@ def na_transfer(alias, sub_nas, args):
     return return_value(True,msg)
 
 
-def na_delete(alias, sub_nas, args):
+def na_delete(alias, args):
     """
     :param alias:
-    :param sub_nas:
     \n:param args [type]:
     \n:returns True if success or False if failed:
     \nif sub_nas defined passes call to sub_nas otherwise
     we try to delete alias
     """
-    nargs = len(args)
-    if sub_nas:
-        return call_sub_nas(sub_nas, "na_delete", args)
-    if nargs > 0:
+    if len(args) > 0:
         alias_type = args[0]
     else:
         alias_type = 0
@@ -343,21 +326,15 @@ def na_delete(alias, sub_nas, args):
     return return_value(False,msg)
 
 
-def na_query(alias, sub_nas, args):
+def na_query(alias, args):
     """
     :param alias:
-    :param sub_nas:
     \n:param args [type]:
     \n:returns alias target if success or False if failed:
     \nif sub_nas defined passes call to sub_nas otherwise
     we try to query alias target
     """
-    # handle sub_nas first
-    nargs = len(args)
-    if sub_nas:
-        return call_sub_nas(sub_nas, "na_query", args)
-
-    if nargs > 0:
+    if len(args) > 0:
         alias_type = args[0]
     else:
         alias_type = 0
@@ -379,21 +356,16 @@ def na_query(alias, sub_nas, args):
     return return_value(False,msg)
 
 
-def na_alias_data(alias, sub_nas, args):
+def na_alias_data(alias, args):
     """
     :param alias:
-    :param sub_nas:
     \n:param args [type]:
     \n:returns alias data as array if success or None if failed:
     \nif sub_nas defined passes call to sub_nas otherwise
     we try to get alias data
     """
-    # handle sub_nas first
-    nargs = len(args)
-    if sub_nas:
-        return call_sub_nas(sub_nas, "na_alias_data", args)
 
-    if nargs > 0:
+    if len(args) > 0:
         alias_type = args[0]
     else:
         alias_type = 0
@@ -408,3 +380,6 @@ def na_alias_data(alias, sub_nas, args):
     msg = concat(msg, " not found or expired.")
     Notify(msg)
     return return_value(False,msg)
+
+
+

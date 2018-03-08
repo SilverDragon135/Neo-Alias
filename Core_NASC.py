@@ -3,7 +3,7 @@ from boa.blockchain.vm.Neo.Runtime import Notify, GetTrigger, CheckWitness
 from boa.blockchain.vm.Neo.App import DynamicAppCall
 from nas.wrappers.storage import Storage
 from boa.blockchain.vm.Neo.Runtime import Notify
-from nas.configuration.Administration import AdminConfiguration
+from nas.configuration.Administration import *
 from core_nas.configuration import init
 
 def Main(operation, args):
@@ -14,10 +14,8 @@ def Main(operation, args):
     trigger = GetTrigger()
     if trigger == Verification:
         # check if the invoker is the owner of this contract
-        configuration = AdminConfiguration()
-        is_owner = CheckWitness(configuration.root_admin)
         # If owner, proceed
-        if is_owner:
+        if CheckWitness(ROOT_ADMIN):
             return True
         return False
     elif trigger == Application:
