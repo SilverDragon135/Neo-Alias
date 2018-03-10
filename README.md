@@ -6,7 +6,6 @@ Neo alias is dapp built on NEO blockchain. The purpose of NA is to make the bloc
 0. code cleanup
     -   setup naming convetion
     -   change boolean return values to integer exit codes (+documentation)
-    -   improve tests and divide them per gateway
     -   document Dynamic SC calls
     -   create ABI documentation
 1. voting protocol for NA and election protocol

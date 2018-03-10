@@ -3,7 +3,7 @@
 
 # privte test configuration
 /tests/configuration/private.py
-
+/*.db3
 #compiled SCs
 *.avm
 
