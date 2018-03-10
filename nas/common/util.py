@@ -1,7 +1,7 @@
 
-from boa.blockchain.vm.Neo.Blockchain import GetHeader, GetHeight
-from boa.blockchain.vm.Neo.Header import GetTimestamp, GetNextConsensus, GetHash
-from nas.configuration.Service import ServiceConfiguration
+from boa.interop.Neo.Blockchain import GetHeader, GetHeight
+from boa.interop.Neo.Header import GetTimestamp
+from nas.common.constants import DEBUG
 
 def get_header_timestamp():
     """
@@ -9,7 +9,11 @@ def get_header_timestamp():
     """
     height=GetHeight()
     header=GetHeader(height)
-    return GetTimestamp(header)
+    if height > 0: # seems like while testing height is zero
+        timestamp = GetTimestamp(header)
+    else:
+        timestamp = 1400000000
+    return timestamp
 
 def list_slice(array, start, stop):
     """
@@ -45,8 +49,7 @@ def return_value(non_debug, debug):
     \nThanks to this we can see text messages as result in test environment and 
     non debug messages in mainnet
     """
-    configuration = ServiceConfiguration()
-    if configuration.debug:
+    if DEBUG:
         return debug
     else: 
         return non_debug

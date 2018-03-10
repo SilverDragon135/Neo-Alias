@@ -3,8 +3,11 @@
 !!! All snippets are moved to automated testing in tests\tests_to_run.py and tests\test_to_run_smart_NEP5.py !!!
 *In automated testing you can find all these snippets and more. I left this snippets here in case you want to see how to call test NA manually.*
 
+You can run tests with command: 'python -m unittest discover ./tests'
 
-Hint: These snippets were used for testing without sub_nas support, for sub_nas testing change False value to True, since you will need DynamicAppCall. In ServiceConfiguration set support_sub_nas_call to True.
+Hint: 
+*   These snippets were used for testing without sub_nas support, for sub_nas testing change False value to True, since you will need DynamicAppCall. In gateway/na.py set sub_nas to True. (SUPPORT_SUB_NAS in nas/common/constants doesnt work, in case it is imported to gateway/na.py, the dapp stops working properly)
+*   For automated testing with DynamicAppCall, add dynamic=true parameter to tests.
 
 build ..\NA\NASC.py test 0710 05 True False na_register ["aaaa","ASnSxavKzDvwXh3ZLxBWhqMbbntwn2TJBM",2,"target",1519912704]
 -   should fail - invalid target
