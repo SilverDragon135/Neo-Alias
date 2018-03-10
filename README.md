@@ -22,5 +22,5 @@ The non-tested parts are DynamicAppCall and sub_nas support now. It seems like t
 
 Requirements:
 -   neo-gui from nel or other app to invoke script, which support sub inner arrays in parameters
--   In ServiceConfiguration set support_sub_nas_call to True.
+-   In gateway/na.py set sub_nas to True. 
 
