@@ -44,7 +44,7 @@ load_run ..\NA\NASC.avm test 0710 05 True False na_delete ["asdhasdy",2]
 -   retuns 1 --> deletes alias
 
 load_run ..\NA\NASC.avm test 0710 05 True False na_offer_sell ["asdhasdy",1000,2]
--   places sell offer with price 1000 of assets (for now it would be gas, later NAC)
+-   places sell offer with price 1000 of NAT
 
 load_run ..\NA\NASC.avm test 0710 05 True False na_cancel_sale_offer ["asdhasdy",2]
 -   closes sell offer

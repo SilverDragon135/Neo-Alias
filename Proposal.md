@@ -34,13 +34,13 @@ Core Neo Alias should be controlled by neo dev community, if they show interest.
 
 The control over Core NA will be provided only to elected administrators. These administrators can create election of root_NA in case of update and redirect Core NA to point to updated version.
 
-# Neo Alias Economy - NAC (Neo Alias Coin)
+# Neo Alias Economy - NAT (Neo Alias Token)
 
 Neo Alias Economy is built around 2 fees:
 - trading fee - commission (hard coded max 50%)
 - holding fee - fee for owning alias for specified time (NEO Accounts should not be included)
 
-All the collected fees will be distributed to NAC holders. The details about rewards will be published with implementation of staking protocol. All non distributed fees will be distributed on protocol launch to all holder proportionately.
+All the collected fees will be distributed to NAT holders. The details about rewards will be published with implementation of staking protocol. All non distributed fees will be distributed on protocol launch to all holder proportionately.
 
 Neo Alias (except Neo Accounts) are registered for maximum duration defined by community. If you want register alias, you have to pay fee (community defined per community defined period) for defined duration (up to maximum). The payment is non refundable. 
 
@@ -53,15 +53,15 @@ Community defined configuration:
 
 Calculation: to pay = (duration / fee period) * fee
 
-NAC will be used to pay and trading with aliases. Expected total supply is 100 000 000 or 1 000 000 000 with 8 decimals. (The community decide) 
+NAT will be used to pay for and trading with aliases. Expected total supply is 100 000 000 or 1 000 000 000 with 8 decimals. (The community decide) 
 
-Expected NAC distribution:
+Expected NAT distribution:
 - 1% founder
 - 15% dev and marketing fund 
 - 5% Neo.org
 - 0-5% CoZ
 - 50% ICO
-- 24-29% staking rewards - in first five years automatically added to fee pool and redistributed to NAC holders .
+- 24-29% staking rewards - in first five years automatically added to fee pool and redistributed to NAT holders .
 
 In case CoZ will be interested in becoming NAA, the 5% reserved to CoZ will be merged with staking rewards and CoZ would control dev fund.
 

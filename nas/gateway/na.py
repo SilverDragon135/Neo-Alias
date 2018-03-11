@@ -118,7 +118,7 @@ def NEP5_call(operation, args):
     :param operation:
     :param args [...]:
     \nhandles 2 scenarios based on parameters call:
-    \n - returns values for NAC token, if standard parameter count
+    \n - returns values for NAT token, if standard parameter count
     \n - passes NEP5 call to other asset based on added parameter(args[0]) [alias_name, sub_nas] 
     """
     nargs = len(args)

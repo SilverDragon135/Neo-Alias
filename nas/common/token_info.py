@@ -1,11 +1,11 @@
 """
 Contains NEO Alias Coin specification
-NAC name and symbol is are not definitive and will be consulted with
+NAT name and symbol is are not definitive and will be consulted with
 community
 """
-TOKEN_NAME = 'Neo Alias Coin'
+TOKEN_NAME = 'Neo Alias Token'
 
-TOKEN_SYMBOL = 'NAC'
+TOKEN_SYMBOL = 'NAT'
 
 TOKEN_DECIMALS = 8
 

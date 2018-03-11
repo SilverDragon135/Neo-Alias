@@ -83,7 +83,7 @@ class TestContract(BoaFixtureTest):
         print('===== symbol =====')
         tx, results, total_ops, engine = TestBuild(out, ['symbol', '[]'], self.GetWallet1(), '0710', '05')
         self.assertEqual(len(results), 1)
-        self.assertEqual(results[0].GetString() , 'NAC')
+        self.assertEqual(results[0].GetString() , 'NAT')
 
         print('===== totalSupply =====')
         tx, results, total_ops, engine = TestBuild(out, ['totalSupply', '[]'], self.GetWallet1(), '0710', '05')
