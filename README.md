@@ -24,3 +24,5 @@ Requirements:
 -   neo-gui from nel or other app to invoke script, which support sub inner arrays in parameters
 -   In gateway/na.py set sub_nas to True. 
 
+If you like this, you can support this project:
+Donations: ARSforLjf3753vR6N3c5Dx4XtMCpq53YVS
